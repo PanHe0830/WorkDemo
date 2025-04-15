@@ -1,0 +1,7 @@
+.vsconfig
+.vs
+Binaries/
+Intermediate/
+Saved/
+WorkDemo.sln
+Content/
