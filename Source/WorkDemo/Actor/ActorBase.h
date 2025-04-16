@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ActorBase.generated.h"
 
-class USkeletalMeshComponent;
+class UStaticMeshComponent;
 class UBoxComponent;
 
 UCLASS()
@@ -22,13 +22,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void Destroyed() override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Actor")
-	USkeletalMeshComponent* ActorMesh;
+	//UPROPERTY(EditAnywhere, Category = "Actor")
+	//USkeletalMeshComponent* ActorSketalMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Actor")
 	UBoxComponent* BoxCollicion;
+
+	UPROPERTY(EditAnywhere, Category = "Actor")
+	UStaticMeshComponent* ActorStaticMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Actor")
+	float MaxHealth = 100.f;
+
+	UPROPERTY(EditAnywhere, Category = "Actor")
+	float Health = 100.f;
 };

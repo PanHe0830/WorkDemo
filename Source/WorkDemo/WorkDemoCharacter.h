@@ -64,6 +64,14 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	virtual void Tick(float DetalTimes) override;
+
+private:
+	void HideCharacterIfCameraClose();
+
+	UPROPERTY(EditAnywhere)
+	float CameraThreshold = 200.f;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
