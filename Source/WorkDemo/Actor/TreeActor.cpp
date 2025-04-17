@@ -22,7 +22,7 @@ void ATreeActor::BeginPlay()
         {
             ActorStaticMesh->SetStaticMesh(SelectedMesh);
         }
-        UE_LOG(LogTemp , Warning , TEXT("spawn tree"));
+        //UE_LOG(LogTemp , Warning , TEXT("spawn tree"));
     }
 
     OnTakeAnyDamage.AddDynamic(this,&ATreeActor::RecvDamage);
@@ -31,7 +31,6 @@ void ATreeActor::BeginPlay()
 void ATreeActor::Destroyed()
 {
     Super::Destroyed();
-
 
 }
 
