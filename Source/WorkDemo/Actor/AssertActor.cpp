@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "LandscapeProxy.h"
 #include "WorkDemo/WorkDemoCharacter.h"
+#include "WorkDemo/HUD/PickUpWidget.h"
 
 AAssertActor::AAssertActor()
 {
@@ -37,6 +38,8 @@ void AAssertActor::BeginPlay()
     }
     SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AAssertActor::SphereComponentBeginOverlap);
     SphereComponent->OnComponentEndOverlap.AddDynamic(this,&AAssertActor::SphereComponentEndOverlag);
+    
+    SetWidgetContent();
 }
 
 bool AAssertActor::CheckAssertPosition()
@@ -140,6 +143,18 @@ void AAssertActor::SetWidgetVisibility(bool bFlag)
     if (ShowWidget)
     {
         ShowWidget->SetVisibility(bFlag);
+    }
+}
+
+void AAssertActor::SetWidgetContent()
+{
+    if (UUserWidget* UserWidget = ShowWidget->GetUserWidgetObject())
+    {
+        UPickUpWidget* InfoWidget = Cast<UPickUpWidget>(UserWidget);
+        if (InfoWidget)
+        {
+            InfoWidget->SetResourceData(AssertAndAssertNum);
+        }
     }
 }
 
