@@ -11,6 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "WorkDemo/Component/MyPlayerMovementComponent.h"
+#include "WorkDemo/Component/InventoryComponent.h"
+#include "WorkDemo/HUD/InventoryWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -53,6 +55,10 @@ AWorkDemoCharacter::AWorkDemoCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	/** 创建背包组件 */
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+
 }
 
 void AWorkDemoCharacter::BeginPlay()

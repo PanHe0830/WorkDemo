@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "MainWidget.generated.h"
 
+class UInventoryWidget;
+
 /**
  * 
  */
@@ -15,9 +17,15 @@ class WORKDEMO_API UMainWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	UFUNCTION(BlueprintCallable)
+	void MenuSetUp();
 
+
+	void SetBagUiVisibility(ESlateVisibility bflag);
 protected:
 
 private:
 
+	UPROPERTY(meta = (BindWidget))
+	UInventoryWidget* InventoryWidget;
 };

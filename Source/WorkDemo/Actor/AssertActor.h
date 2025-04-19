@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ActorBase.h"
-#include "WorkDemo/AssertType.h"
+#include "WorkDemo/Type/AssertType.h"
 #include "AssertActor.generated.h"
 
 class UWidgetComponent;

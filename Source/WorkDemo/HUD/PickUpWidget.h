@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "WorkDemo/AssertType.h"
+#include "WorkDemo/Type/AssertType.h"
 #include "PickUpWidget.generated.h"
 
 /**

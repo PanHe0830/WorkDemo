@@ -9,9 +9,29 @@
 /**
  * 
  */
+
+class UMainWidget;
+
 UCLASS()
 class WORKDEMO_API ACharacterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void SetupInputComponent() override;
 	
+public:
+	void SetBagVisibility();
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UMainWidget> MainWidget;
+
+	// Ö÷UIÊµÀý
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	UMainWidget* MainWidgetInstance;
+
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	bool bFlag = false;
 };

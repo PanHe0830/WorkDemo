@@ -13,6 +13,8 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class UMyPlayerMovementComponent;
+class UInventoryComponent;
+class UInventoryWidget;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -48,6 +50,11 @@ class AWorkDemoCharacter : public ACharacter
 	/** MyCharacterMoveComponet */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UMyPlayerMovementComponent* MoveComponent;
+
+	/** 角色背包 */
+	UPROPERTY(EditAnywhere, Category = "Component")
+	UInventoryComponent* InventoryComponent;
+	/** 角色背包 */
 
 public:
 	AWorkDemoCharacter();
