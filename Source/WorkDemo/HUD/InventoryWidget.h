@@ -8,6 +8,7 @@
 
 class UWrapBox;
 class UBagModelWidget;
+class UUniformGridPanel;
 /**
  * 
  */
@@ -19,12 +20,11 @@ class WORKDEMO_API UInventoryWidget : public UUserWidget
 public:
     virtual void NativeConstruct() override;
 
-#if 0
     UPROPERTY(meta = (BindWidget))
     UUniformGridPanel* UniformGridPanel;
-#endif
-    UPROPERTY(meta = (BindWidget))
-    UWrapBox* WrapBox;
+
+    //UPROPERTY(meta = (BindWidget))
+    //UWrapBox* WrapBox;
     
     UPROPERTY(EditDefaultsOnly, Category = "Backpack")
     TSubclassOf<UBagModelWidget> ItemSlotWidgetClass;
