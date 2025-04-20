@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "WorkDemo/Type/AssertType.h"
 #include "WorkDemoCharacter.generated.h"
 
 class USpringArmComponent;
@@ -59,7 +60,6 @@ class AWorkDemoCharacter : public ACharacter
 public:
 	AWorkDemoCharacter();
 	
-
 protected:
 
 	/** Called for movement input */
@@ -78,16 +78,29 @@ protected:
 
 	virtual void Tick(float DetalTimes) override;
 
+public:
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/** Returns FollowCamera subobject **/
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
 private:
+	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
 	void HideCharacterIfCameraClose();
 
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
 public:
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	/** 记录当前角色可以拿到那些物品 */
+	void SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, float>& Assert , AActor* actor);	// 设置当前的物品类型和数量
+
+	void ClearCurrentCanPickUpAssertTypeAndNum();// 清空当前的物品类型和数量
+
+	UPROPERTY(VisibleAnywhere, Category = "Assert")
+	TMap<EAssertType, float> AssertAndAssertNum;
+
+	UPROPERTY(VisibleAnywhere, Category = "Assert")
+	AActor* AssertActor;
 };
 

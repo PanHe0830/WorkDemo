@@ -22,6 +22,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void Destroyed() override;
+
 private:
 	bool CheckAssertPosition();
 

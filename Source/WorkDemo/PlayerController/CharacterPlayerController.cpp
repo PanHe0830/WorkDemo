@@ -3,6 +3,8 @@
 
 #include "CharacterPlayerController.h"
 #include "WorkDemo/HUD/MainWidget.h"
+#include "WorkDemo/WorkDemoCharacter.h"
+#include "GameFramework/Actor.h"
 
 void ACharacterPlayerController::BeginPlay()
 {
@@ -23,6 +25,7 @@ void ACharacterPlayerController::SetupInputComponent()
     Super::SetupInputComponent();
 
     InputComponent->BindAction("OpenBag" , IE_Pressed , this , &ACharacterPlayerController::SetBagVisibility);
+    InputComponent->BindAction("PickUpAssert", IE_Pressed, this, &ACharacterPlayerController::PickUpAssert);
 }
 
 void ACharacterPlayerController::SetBagVisibility()
@@ -38,4 +41,18 @@ void ACharacterPlayerController::SetBagVisibility()
         UE_LOG(LogTemp, Warning, TEXT("hidder"));
     }
     bFlag = !bFlag;
+}
+
+void ACharacterPlayerController::PickUpAssert()
+{
+    AWorkDemoCharacter* character = Cast<AWorkDemoCharacter>(GetCharacter());
+    if (character)
+    {
+        AActor* actor = character->AssertActor;
+        if (actor)
+        {
+            actor->Destroy();
+            
+        }
+    }
 }

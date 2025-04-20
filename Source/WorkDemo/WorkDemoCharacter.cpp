@@ -74,18 +74,6 @@ void AWorkDemoCharacter::Tick(float DetalTimes)
 	HideCharacterIfCameraClose();
 }
 
-void AWorkDemoCharacter::HideCharacterIfCameraClose()
-{
-	if ((FollowCamera->GetComponentLocation() - GetActorLocation()).Size() < CameraThreshold)
-	{
-		GetMesh()->SetVisibility(false);
-	}
-	else
-	{
-		GetMesh()->SetVisibility(true);
-	}
-}
-
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -153,4 +141,28 @@ void AWorkDemoCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AWorkDemoCharacter::HideCharacterIfCameraClose()
+{
+	if ((FollowCamera->GetComponentLocation() - GetActorLocation()).Size() < CameraThreshold)
+	{
+		GetMesh()->SetVisibility(false);
+	}
+	else
+	{
+		GetMesh()->SetVisibility(true);
+	}
+}
+
+void AWorkDemoCharacter::SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, float>& Assert , AActor* actor)
+{
+	AssertActor = actor;
+	AssertAndAssertNum = Assert;
+}
+
+void AWorkDemoCharacter::ClearCurrentCanPickUpAssertTypeAndNum()
+{
+	AssertActor = nullptr;
+	AssertAndAssertNum.Empty();
 }

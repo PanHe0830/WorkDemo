@@ -23,7 +23,11 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 public:
+	// 点击I键设置背包的显示或隐藏
 	void SetBagVisibility();
+
+	// 点击E键拾取资源
+	void PickUpAssert();
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UMainWidget> MainWidget;
