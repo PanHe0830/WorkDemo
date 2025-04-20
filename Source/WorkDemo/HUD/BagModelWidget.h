@@ -18,6 +18,8 @@ class WORKDEMO_API UBagModelWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	virtual void NativeConstruct() override;
+
 	void SetImagePicture();
 
 	void SetAssertNum(FText Num);

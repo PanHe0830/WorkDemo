@@ -6,6 +6,12 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h" 
 
+void UBagModelWidget::NativeConstruct()
+{
+	AssertImage->SetBrushFromTexture(nullptr,true);
+	AssertNum->SetText(FText());
+}
+
 void UBagModelWidget::SetImagePicture()
 {
 	//AssertImage->texture;
