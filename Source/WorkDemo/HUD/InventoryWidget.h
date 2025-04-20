@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "InventoryWidget.generated.h"
 
-class UUniformGridPanel;
+class UWrapBox;
 class UBagModelWidget;
 /**
  * 
@@ -19,9 +19,13 @@ class WORKDEMO_API UInventoryWidget : public UUserWidget
 public:
     virtual void NativeConstruct() override;
 
+#if 0
     UPROPERTY(meta = (BindWidget))
     UUniformGridPanel* UniformGridPanel;
-
+#endif
+    UPROPERTY(meta = (BindWidget))
+    UWrapBox* WrapBox;
+    
     UPROPERTY(EditDefaultsOnly, Category = "Backpack")
     TSubclassOf<UBagModelWidget> ItemSlotWidgetClass;
 
