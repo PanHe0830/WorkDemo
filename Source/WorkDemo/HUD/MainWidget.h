@@ -20,12 +20,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MenuSetUp();
 
-
 	void SetBagUiVisibility(ESlateVisibility bflag);
+
 protected:
 
 private:
 
 	UPROPERTY(meta = (BindWidget))
 	UInventoryWidget* InventoryWidget;
+
+public:
+	FORCEINLINE UInventoryWidget* GetInventory() { return InventoryWidget; };
 };

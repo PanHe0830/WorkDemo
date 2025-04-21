@@ -12,10 +12,10 @@ struct FItemData
     int32 ItemID = -1;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 Quantity = 0;
+    float Quantity = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 MaxStackSize = 99;
+    float MaxStackSize = 999.f;
 
     bool IsValid() const { return ItemID != -1; }
 };

@@ -7,6 +7,8 @@
 #include "WorkDemo/Type/AssertType.h"
 #include "PickUpWidget.generated.h"
 
+/** 显示资源的信息和数量 */
+
 /**
  * 
  */

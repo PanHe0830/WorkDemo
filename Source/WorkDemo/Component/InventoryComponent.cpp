@@ -33,35 +33,35 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-bool UInventoryComponent::AddItem(int32 ItemID, int32 Quantity)
+bool UInventoryComponent::AddItem(int32 ItemID, float Quantity)
 {
-    for (FItemData& Slot : Items)
+    for (FItemData& ite : Items)
     {
-        if (Slot.ItemID == ItemID && Slot.Quantity < Slot.MaxStackSize)
+        //UE_LOG(LogTemp , Warning , TEXT("first for %d"),Items.Num());
+        if (ItemID == ite.ItemID && ite.Quantity < ite.MaxStackSize)
         {
-            int32 AddAmount = FMath::Min(Slot.MaxStackSize - Slot.Quantity, Quantity);
-            Slot.Quantity += AddAmount;
-            Quantity -= AddAmount;
-            if (Quantity <= 0) return true;
+            float AddCount = FMath::Min(ite.MaxStackSize - ite.Quantity, Quantity);
+            ite.Quantity += AddCount;
+            return true;
         }
     }
 
-    for (FItemData& Slot : Items)
+    for (FItemData& ite : Items)
     {
-        if (!Slot.IsValid())
+        //UE_LOG(LogTemp, Warning, TEXT("second for %d"), Items.Num());
+        if (!ite.IsValid())
         {
-            Slot.ItemID = ItemID;
-            Slot.Quantity = FMath::Min(Quantity, 99);
-            Slot.MaxStackSize = 99;
-            Quantity -= Slot.Quantity;
-            if (Quantity <= 0) return true;
+            ite.ItemID = ItemID;
+            ite.Quantity = FMath::Min(Quantity, 999.f);
+            ite.MaxStackSize = 999.f;
+            return true;
         }
     }
 
     return false;
 }
 
-bool UInventoryComponent::RemoveItem(int32 ItemID, int32 Quantity)
+bool UInventoryComponent::RemoveItem(int32 ItemID, float Quantity)
 {
     for (FItemData& Slot : Items)
     {
@@ -78,3 +78,10 @@ bool UInventoryComponent::RemoveItem(int32 ItemID, int32 Quantity)
     return false;
 }
 
+void UInventoryComponent::PrintItemsTypeAndNum()
+{
+    for (auto& ite : Items)
+    {
+        UE_LOG(LogTemp , Warning , TEXT("%d: %f") , ite.ItemID , ite.Quantity);
+    }
+}

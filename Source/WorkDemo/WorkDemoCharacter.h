@@ -52,10 +52,6 @@ class AWorkDemoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UMyPlayerMovementComponent* MoveComponent;
 
-	/** 角色背包 */
-	UPROPERTY(EditAnywhere, Category = "Component")
-	UInventoryComponent* InventoryComponent;
-	/** 角色背包 */
 
 public:
 	AWorkDemoCharacter();
@@ -102,5 +98,15 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
 	AActor* AssertActor;
+
+private:
+	/** 角色背包 */
+	UPROPERTY(EditAnywhere, Category = "Component")
+	UInventoryComponent* InventoryComponent;
+
+public:
+	void PickUpCurrentAssertInInventoryComponent();
+
+	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; };
 };
 

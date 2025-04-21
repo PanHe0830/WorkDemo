@@ -5,6 +5,7 @@
 #include "WorkDemo/HUD/MainWidget.h"
 #include "WorkDemo/WorkDemoCharacter.h"
 #include "GameFramework/Actor.h"
+#include "WorkDemo/HUD/InventoryWidget.h"
 
 void ACharacterPlayerController::BeginPlay()
 {
@@ -33,12 +34,12 @@ void ACharacterPlayerController::SetBagVisibility()
     if(bFlag)
     {
         MainWidgetInstance->SetBagUiVisibility(ESlateVisibility::Hidden);
-        UE_LOG(LogTemp, Warning, TEXT("visible"));
+        //UE_LOG(LogTemp, Warning, TEXT("visible"));
     }
     else
     {
         MainWidgetInstance->SetBagUiVisibility(ESlateVisibility::Visible);
-        UE_LOG(LogTemp, Warning, TEXT("hidder"));
+        //UE_LOG(LogTemp, Warning, TEXT("hidder"));
     }
     bFlag = !bFlag;
 }
@@ -51,8 +52,10 @@ void ACharacterPlayerController::PickUpAssert()
         AActor* actor = character->AssertActor;
         if (actor)
         {
+            character->PickUpCurrentAssertInInventoryComponent();
+
             actor->Destroy();
-            
+            // TODO -- 将面前的资源放到背包中
         }
     }
 }

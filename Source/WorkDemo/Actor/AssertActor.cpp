@@ -171,6 +171,7 @@ void AAssertActor::SphereComponentBeginOverlap(UPrimitiveComponent* OverlappedCo
     AWorkDemoCharacter* WrokDemoCharacter = Cast<AWorkDemoCharacter>(OtherActor);
     if (WrokDemoCharacter)
     {
+        UE_LOG(LogTemp , Warning , TEXT("WrokDemoCharacter is exist"));
         WrokDemoCharacter->SetCurrentCanPickUpAssertTypeAndNum(AssertAndAssertNum , this);
     }
 }

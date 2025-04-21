@@ -35,11 +35,13 @@ public:
 	TArray<FItemData> Items;
 
 	UFUNCTION(BlueprintCallable)
-	bool AddItem(int32 ItemID, int32 Quantity);
+	bool AddItem(int32 ItemID, float Quantity);
 
 	UFUNCTION(BlueprintCallable)
-	bool RemoveItem(int32 ItemID, int32 Quantity);
+	bool RemoveItem(int32 ItemID, float Quantity);
 
 	UFUNCTION(BlueprintCallable)
 	const TArray<FItemData>& GetItems() const { return Items; }
+
+	void PrintItemsTypeAndNum();
 };

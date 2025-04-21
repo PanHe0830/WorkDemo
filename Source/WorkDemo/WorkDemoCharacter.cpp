@@ -159,10 +159,28 @@ void AWorkDemoCharacter::SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, f
 {
 	AssertActor = actor;
 	AssertAndAssertNum = Assert;
+	//for (auto& ite : AssertAndAssertNum)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("%d , %f"),ite.Key , ite.Value);
+	//}
 }
 
 void AWorkDemoCharacter::ClearCurrentCanPickUpAssertTypeAndNum()
 {
 	AssertActor = nullptr;
 	AssertAndAssertNum.Empty();
+}
+
+void AWorkDemoCharacter::PickUpCurrentAssertInInventoryComponent()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("%d"), AssertAndAssertNum.Num());
+	for (auto& ite : AssertAndAssertNum)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("%d %f"), static_cast<int32>(ite.Key), ite.Value);
+		InventoryComponent->AddItem(static_cast<int32>(ite.Key),ite.Value);
+	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("======================================================="));
+	//
+	//InventoryComponent->PrintItemsTypeAndNum();
 }
