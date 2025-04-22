@@ -33,6 +33,11 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+void UInventoryComponent::SetBagMaxSlots(int32 Slots)
+{
+    Items.SetNum(Slots);
+}
+
 bool UInventoryComponent::AddItem(int32 ItemID, float Quantity)
 {
     for (FItemData& ite : Items)

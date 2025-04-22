@@ -9,6 +9,7 @@
 class UWrapBox;
 class UBagModelWidget;
 class UUniformGridPanel;
+struct FItemData;
 /**
  * 
  */
@@ -19,6 +20,9 @@ class WORKDEMO_API UInventoryWidget : public UUserWidget
 
 public:
     virtual void NativeConstruct() override;
+
+    /** 刷新背包界面 */
+    void RefreshBagSlots(TArray<FItemData> BagAssert);
 
     UPROPERTY(meta = (BindWidget))
     UUniformGridPanel* UniformGridPanel;
@@ -34,4 +38,7 @@ public:
 
     UPROPERTY(EditDefaultsOnly, Category = "Backpack")
     int32 Columns = 6;  // 每行 6 个
+
+    UPROPERTY(VisibleAnywhere, Category = "Backpack")
+    TArray<UBagModelWidget*> BagArray;
 };

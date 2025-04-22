@@ -55,7 +55,6 @@ void ACharacterPlayerController::PickUpAssert()
             character->PickUpCurrentAssertInInventoryComponent();
 
             actor->Destroy();
-            // TODO -- 将面前的资源放到背包中
         }
     }
 }

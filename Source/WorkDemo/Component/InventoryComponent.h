@@ -28,6 +28,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/** 设置背包的数量 */
+	void SetBagMaxSlots(int32 Slots);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxSlots = 30;
 

@@ -9,6 +9,8 @@
 class UImage;
 class UTextBlock;
 class UButton;
+
+enum class EAssertType : uint8;
 /**
  * 
  */
@@ -20,12 +22,17 @@ class WORKDEMO_API UBagModelWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	void SetImagePicture();
+	void SetImagePicture(UTexture2D* AssertImage);
 
 	void SetAssertNum(FText Num);
 
+	void SetAssertType(EAssertType type);
+
 	UPROPERTY(meta = (BindWidget))
-	UImage* AssertImage;
+	UImage* AssertImageWidget;
+
+	UPROPERTY(VisibleAnywhere, Category = "Assert")
+	UTexture2D* AssertTexture;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AssertNum;
@@ -33,4 +40,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UButton* AssertButton;
 	
+	UPROPERTY(VisibleAnywhere, Category = "Assert")
+	EAssertType AssertType;
 };
