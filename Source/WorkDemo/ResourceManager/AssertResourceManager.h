@@ -17,7 +17,7 @@ struct FStreamableManager;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class WORKDEMO_API UAssertResourceManager : public UObject
 {
 	GENERATED_BODY()
