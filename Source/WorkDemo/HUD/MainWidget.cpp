@@ -3,6 +3,7 @@
 
 #include "MainWidget.h"
 #include "InventoryWidget.h"
+#include "WorkDemo/Type/ItemData.h"
 
 void UMainWidget::MenuSetUp()
 {
@@ -14,5 +15,13 @@ void UMainWidget::MenuSetUp()
 void UMainWidget::SetBagUiVisibility(ESlateVisibility bflag)
 {
 	InventoryWidget->SetVisibility(bflag);
+}
+
+void UMainWidget::RefreshBagUi(TArray<FItemData> BagAssert)
+{
+	if (InventoryWidget)
+	{
+		InventoryWidget->RefreshBagSlots(BagAssert);
+	}
 }
 

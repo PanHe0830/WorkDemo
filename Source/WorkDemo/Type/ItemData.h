@@ -17,5 +17,8 @@ struct FItemData
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float MaxStackSize = 999.f;
 
+    UPROPERTY(VisibleAnywhere , BlueprintReadOnly)
+    UTexture2D* AssertTexture = nullptr;
+    
     bool IsValid() const { return ItemID != -1; }
 };

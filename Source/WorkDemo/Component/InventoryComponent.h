@@ -11,6 +11,8 @@
 #include "WorkDemo/Type/ItemData.h"
 #include "InventoryComponent.generated.h"
 
+class UAssertResourceManager;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WORKDEMO_API UInventoryComponent : public UActorComponent
 {
@@ -47,4 +49,7 @@ public:
 	const TArray<FItemData>& GetItems() const { return Items; }
 
 	void PrintItemsTypeAndNum();
+
+	UPROPERTY(VisibleAnywhere, Category = "Resource")
+	UAssertResourceManager* ResourceManager;
 };

@@ -48,6 +48,7 @@ void UInventoryWidget::RefreshBagSlots(TArray<FItemData> BagAssert)
     int32 BagNum = BagArray.Num();
     for (int32 Bag = 0; Bag < BagNum; Bag++)
     {
+        BagArray[Bag]->SetImagePicture(BagAssert[Bag].AssertTexture);
         BagArray[Bag]->SetAssertNum(FText::FromString(FString::Printf(TEXT("%.2f"), BagAssert[Bag].Quantity)));
     }
 }

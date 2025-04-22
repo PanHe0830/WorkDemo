@@ -10,6 +10,7 @@ UTexture2D* UAssertResourceManager::GetIconByType(EAssertType Type) const
 {
     if (AssertIconMap.Contains(Type))
     {
+        UE_LOG(LogTemp, Warning, TEXT("have picture"));
         return AssertIconMap[Type].LoadSynchronous();
     }
     return nullptr;

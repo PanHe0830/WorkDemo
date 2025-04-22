@@ -7,6 +7,7 @@
 #include "MainWidget.generated.h"
 
 class UInventoryWidget;
+struct FItemData;
 
 /**
  * 
@@ -21,6 +22,8 @@ public:
 	void MenuSetUp();
 
 	void SetBagUiVisibility(ESlateVisibility bflag);
+
+	void RefreshBagUi(TArray<FItemData> BagAssert);
 
 protected:
 

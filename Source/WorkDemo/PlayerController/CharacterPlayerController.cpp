@@ -6,6 +6,7 @@
 #include "WorkDemo/WorkDemoCharacter.h"
 #include "GameFramework/Actor.h"
 #include "WorkDemo/HUD/InventoryWidget.h"
+#include "WorkDemo/Component/InventoryComponent.h"
 
 void ACharacterPlayerController::BeginPlay()
 {
@@ -39,9 +40,11 @@ void ACharacterPlayerController::SetBagVisibility()
     else
     {
         MainWidgetInstance->SetBagUiVisibility(ESlateVisibility::Visible);
+        RefreshUi();
         //UE_LOG(LogTemp, Warning, TEXT("hidder"));
     }
     bFlag = !bFlag;
+
 }
 
 void ACharacterPlayerController::PickUpAssert()
@@ -53,8 +56,27 @@ void ACharacterPlayerController::PickUpAssert()
         if (actor)
         {
             character->PickUpCurrentAssertInInventoryComponent();
-
             actor->Destroy();
+        }
+    }
+
+    if (bFlag)
+    {
+        RefreshUi();
+    }
+}
+
+void ACharacterPlayerController::RefreshUi()
+{
+    AWorkDemoCharacter* character = Cast<AWorkDemoCharacter>(GetCharacter());
+    if (character)
+    {
+        UInventoryComponent* Inventory = character->GetInventoryComponent();
+        if (Inventory && MainWidgetInstance)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("RefreshUi controller"));
+            Inventory->PrintItemsTypeAndNum();
+            MainWidgetInstance->RefreshBagUi(Inventory->GetItems());
         }
     }
 }

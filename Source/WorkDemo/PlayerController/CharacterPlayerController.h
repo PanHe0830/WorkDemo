@@ -29,6 +29,9 @@ public:
 	// 点击E键拾取资源
 	void PickUpAssert();
 
+	// 刷新背包界面
+	void RefreshUi();
+
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UMainWidget> MainWidget;
 

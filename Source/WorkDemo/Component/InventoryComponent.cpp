@@ -2,6 +2,8 @@
 
 
 #include "InventoryComponent.h"
+#include "WorkDemo/ResourceManager/AssertResourceManager.h"
+#include "WorkDemo/Type/AssertType.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -21,7 +23,8 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+    //ResourceManager = NewObject<UAssertResourceManager>();
+    ResourceManager = LoadObject<UAssertResourceManager>(nullptr, TEXT("BluePrint/ResourceManager/BP_AssertResourceManager"));
 }
 
 
@@ -59,6 +62,10 @@ bool UInventoryComponent::AddItem(int32 ItemID, float Quantity)
             ite.ItemID = ItemID;
             ite.Quantity = FMath::Min(Quantity, 999.f);
             ite.MaxStackSize = 999.f;
+            if (ResourceManager)
+            {
+                ite.AssertTexture = ResourceManager->GetIconByType(static_cast<EAssertType>(ItemID));
+            }
             return true;
         }
     }
