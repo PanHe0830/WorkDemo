@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "WorkDemo/HUD/InventoryWidget.h"
 #include "WorkDemo/Component/InventoryComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "WorkDemo/Actor/TreeActor.h"
 
 void ACharacterPlayerController::BeginPlay()
 {
@@ -28,6 +30,7 @@ void ACharacterPlayerController::SetupInputComponent()
 
     InputComponent->BindAction("OpenBag" , IE_Pressed , this , &ACharacterPlayerController::SetBagVisibility); // I
     InputComponent->BindAction("PickUpAssert", IE_Pressed, this, &ACharacterPlayerController::PickUpAssert); // E
+    InputComponent->BindAction("TreeDamage", IE_Pressed, this, &ACharacterPlayerController::DamageTree); // mouse left
 }
 
 void ACharacterPlayerController::SetBagVisibility()
@@ -63,6 +66,54 @@ void ACharacterPlayerController::PickUpAssert()
     if (bFlag)
     {
         RefreshUi();
+    }
+}
+
+void ACharacterPlayerController::DamageTree()
+{
+    AWorkDemoCharacter* character = Cast<AWorkDemoCharacter>(GetCharacter());
+    FVector StartLocation;
+    FVector EndLocation;
+    if (character)
+    {
+        USkeletalMeshComponent* Mesh = character->GetMesh();
+        if (Mesh)
+        {
+            StartLocation = Mesh->GetSocketLocation("LineTraceStart"); // LineTraceStart 是我在角色网格体上新添加的插槽，用于射线检测
+
+            FVector ForwardVector; // 角色当前的方向
+            ForwardVector = character->GetActorForwardVector();
+            EndLocation = StartLocation + (ForwardVector * 100.f);
+
+            FCollisionQueryParams CollisionParams;
+            CollisionParams.AddIgnoredActor(character);  // 排除自己
+
+            FHitResult HitResult;
+            UWorld* World = GetWorld();
+            if (World)
+            {
+                bool bflag = World->LineTraceSingleByChannel(
+                    HitResult,
+                    StartLocation,
+                    EndLocation,
+                    ECollisionChannel::ECC_WorldStatic,
+                    CollisionParams
+                );
+            }
+
+            AActor* HitActor = HitResult.GetActor();
+            //ATreeActor* TreeActor = Cast<ATreeActor>(HitActor);
+            if (HitActor)
+            {
+                UGameplayStatics::ApplyDamage(
+                    HitActor,
+                    CurrentDamage,
+                    this,
+                    character,
+                    UDamageType::StaticClass()
+                );
+            }
+        }
     }
 }
 

@@ -39,6 +39,8 @@ void ATreeActor::RecvDamage(AActor* DamagedActor, float Damage, const class UDam
 {
     Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 
+    UE_LOG(LogTemp, Warning, TEXT("Tree Actor recv damage"));
+
     if (Health <= 0)
     {
         Destroy();

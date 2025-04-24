@@ -29,6 +29,9 @@ public:
 	// 点击E键拾取资源
 	void PickUpAssert();
 
+	// 点击鼠标左键砍树操作
+	void DamageTree();
+
 	// 刷新背包界面
 	void RefreshUi();
 
@@ -44,4 +47,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	bool bFlag = false;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float CurrentDamage = 50.f;
 };
