@@ -25,6 +25,8 @@ protected:
 	UFUNCTION()
 	void RecvDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
+	void SetMeshCollision();
+
 	//UPROPERTY(EditAnywhere, Category = "Tree")
 	//TArray<USkeletalMesh*> MeshComponent;
 

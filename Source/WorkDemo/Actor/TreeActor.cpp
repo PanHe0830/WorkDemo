@@ -21,8 +21,8 @@ void ATreeActor::BeginPlay()
         if (SelectedMesh)
         {
             ActorStaticMesh->SetStaticMesh(SelectedMesh);
+            SetMeshCollision();
         }
-        //UE_LOG(LogTemp , Warning , TEXT("spawn tree"));
     }
 
     OnTakeAnyDamage.AddDynamic(this,&ATreeActor::RecvDamage);
@@ -43,4 +43,15 @@ void ATreeActor::RecvDamage(AActor* DamagedActor, float Damage, const class UDam
     {
         Destroy();
     }
+}
+
+void ATreeActor::SetMeshCollision()
+{
+    ActorStaticMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+    ActorStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    //ActorStaticMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+    ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
+    ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
+    ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
+    ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 }

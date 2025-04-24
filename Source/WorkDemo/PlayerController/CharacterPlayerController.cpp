@@ -26,8 +26,8 @@ void ACharacterPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();
 
-    InputComponent->BindAction("OpenBag" , IE_Pressed , this , &ACharacterPlayerController::SetBagVisibility);
-    InputComponent->BindAction("PickUpAssert", IE_Pressed, this, &ACharacterPlayerController::PickUpAssert);
+    InputComponent->BindAction("OpenBag" , IE_Pressed , this , &ACharacterPlayerController::SetBagVisibility); // I
+    InputComponent->BindAction("PickUpAssert", IE_Pressed, this, &ACharacterPlayerController::PickUpAssert); // E
 }
 
 void ACharacterPlayerController::SetBagVisibility()
