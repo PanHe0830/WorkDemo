@@ -80,3 +80,8 @@ void ACharacterPlayerController::RefreshUi()
         }
     }
 }
+
+void ACharacterPlayerController::CheckDistanceByViewChannel()
+{
+
+}

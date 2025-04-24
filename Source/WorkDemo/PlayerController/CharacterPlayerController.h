@@ -32,6 +32,9 @@ public:
 	// 刷新背包界面
 	void RefreshUi();
 
+	// 视线检测，检测能否对树木进行砍伐
+	void CheckDistanceByViewChannel();
+
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UMainWidget> MainWidget;
 
