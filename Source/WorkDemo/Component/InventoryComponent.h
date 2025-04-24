@@ -12,6 +12,7 @@
 #include "InventoryComponent.generated.h"
 
 class UAssertResourceManager;
+class UBuildSubsystem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WORKDEMO_API UInventoryComponent : public UActorComponent
@@ -50,6 +51,9 @@ public:
 
 	void PrintItemsTypeAndNum();
 
-	UPROPERTY(VisibleAnywhere, Category = "Resource")
-	UAssertResourceManager* ResourceManager;
+	UPROPERTY()
+	UBuildSubsystem* BuildSystem;
+
+	UPROPERTY()
+	UAssertResourceManager* AssertResourceManager;
 };

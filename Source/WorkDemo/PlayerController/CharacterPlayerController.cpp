@@ -74,8 +74,8 @@ void ACharacterPlayerController::RefreshUi()
         UInventoryComponent* Inventory = character->GetInventoryComponent();
         if (Inventory && MainWidgetInstance)
         {
-            UE_LOG(LogTemp, Warning, TEXT("RefreshUi controller"));
-            Inventory->PrintItemsTypeAndNum();
+            //UE_LOG(LogTemp, Warning, TEXT("RefreshUi controller %d") , Inventory->GetItems().Num());
+            //Inventory->PrintItemsTypeAndNum();
             MainWidgetInstance->RefreshBagUi(Inventory->GetItems());
         }
     }

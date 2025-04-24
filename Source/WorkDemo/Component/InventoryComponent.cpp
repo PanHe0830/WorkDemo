@@ -2,8 +2,9 @@
 
 
 #include "InventoryComponent.h"
-#include "WorkDemo/ResourceManager/AssertResourceManager.h"
 #include "WorkDemo/Type/AssertType.h"
+#include "WorkDemo/SubSystem/BuildSubsystem.h"
+#include "WorkDemo/ResourceManager/AssertResourceManager.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -23,8 +24,19 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-    //ResourceManager = NewObject<UAssertResourceManager>();
-    ResourceManager = LoadObject<UAssertResourceManager>(nullptr, TEXT("BluePrint/ResourceManager/BP_AssertResourceManager"));
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        UGameInstance* gameinstance = World->GetGameInstance();
+        if (gameinstance)
+        {
+            BuildSystem = gameinstance->GetSubsystem<UBuildSubsystem>();
+            if (BuildSystem)
+            {
+                AssertResourceManager = BuildSystem->ResourceManager;
+            }
+        }
+    }
 }
 
 
@@ -62,9 +74,9 @@ bool UInventoryComponent::AddItem(int32 ItemID, float Quantity)
             ite.ItemID = ItemID;
             ite.Quantity = FMath::Min(Quantity, 999.f);
             ite.MaxStackSize = 999.f;
-            if (ResourceManager)
+            if (AssertResourceManager)
             {
-                ite.AssertTexture = ResourceManager->GetIconByType(static_cast<EAssertType>(ItemID));
+                ite.AssertTexture = AssertResourceManager->GetIconByType(static_cast<EAssertType>(ItemID));
             }
             return true;
         }
@@ -94,6 +106,7 @@ void UInventoryComponent::PrintItemsTypeAndNum()
 {
     for (auto& ite : Items)
     {
-        UE_LOG(LogTemp , Warning , TEXT("%d: %f") , ite.ItemID , ite.Quantity);
+        FString text = ite.AssertTexture == nullptr ? FString("nullptr") : FString("exist");
+        UE_LOG(LogTemp , Warning , TEXT("%d: %f %s") , ite.ItemID , ite.Quantity, *text);
     }
 }
