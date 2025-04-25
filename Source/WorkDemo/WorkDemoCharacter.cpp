@@ -181,7 +181,10 @@ void AWorkDemoCharacter::PlayHitTreeMontage()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance)
 	{
-		float MontageSeconds = AnimInstance->Montage_Play(HitTreeMontage);
-		UE_LOG(LogTemp, Warning, TEXT("play failed %.1f "), MontageSeconds);
+		if (HitTreeMontage && !AnimInstance->Montage_IsPlaying(HitTreeMontage))
+		{
+			float MontageSeconds = AnimInstance->Montage_Play(HitTreeMontage);
+			UE_LOG(LogTemp, Warning, TEXT("play failed %.1f "), MontageSeconds);
+		}
 	}
 }

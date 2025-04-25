@@ -5,6 +5,7 @@
 #include "UObject/Object.h"
 #include "WorkDemo/Type/AssertType.h"
 #include "Engine/StreamableManager.h" // Ìí¼Ó StreamableManager Ö§³Ö
+#include "WorkDemo/Actor/AssertActor.h"
 
 UTexture2D* UAssertResourceManager::GetIconByType(EAssertType Type) const
 {
@@ -48,3 +49,15 @@ void UAssertResourceManager::LoadIconAsync(EAssertType Type, TFunction<void(UTex
 }
 
 #endif
+
+void UAssertResourceManager::ResourceSpawnAssertActor(UWorld* World,FVector Location, FRotator Rotation)
+{
+    FActorSpawnParameters Parameters;
+    
+    World->SpawnActor<AAssertActor>(
+        AssertActor,
+        Location,
+        Rotation,
+        Parameters
+    );
+}

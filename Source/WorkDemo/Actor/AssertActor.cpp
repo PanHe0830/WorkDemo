@@ -8,6 +8,7 @@
 #include "LandscapeProxy.h"
 #include "WorkDemo/WorkDemoCharacter.h"
 #include "WorkDemo/HUD/PickUpWidget.h"
+#include "TreeActor.h"
 
 AAssertActor::AAssertActor()
 {
@@ -31,15 +32,16 @@ void AAssertActor::BeginPlay()
         SetCurrentAssert();
 
         SetWidgetVisibility(false);
+
+        SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AAssertActor::SphereComponentBeginOverlap);
+        SphereComponent->OnComponentEndOverlap.AddDynamic(this, &AAssertActor::SphereComponentEndOverlag);
+
+        SetWidgetContent();
     }
     else
     {
         Destroy();
     }
-    SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AAssertActor::SphereComponentBeginOverlap);
-    SphereComponent->OnComponentEndOverlap.AddDynamic(this,&AAssertActor::SphereComponentEndOverlag);
-    
-    SetWidgetContent();
 }
 
 void AAssertActor::Destroyed()
@@ -58,7 +60,6 @@ bool AAssertActor::CheckAssertPosition()
         // 设置碰撞查询参数
         FCollisionQueryParams CollisionParams;
         CollisionParams.AddIgnoredActor(this); // 忽略附加到的Actor
-        //CollisionParams.AddIgnoredComponent(SphereComponent); // 忽略自身碰撞体
         TArray<UActorComponent*> Components;
         GetComponents(Components);
         for (UActorComponent* Component : Components)
@@ -81,7 +82,7 @@ bool AAssertActor::CheckAssertPosition()
 
         //DrawDebugSphere(World, GetActorLocation(), SphereComponent->GetScaledSphereRadius(), 24, FColor::Red,true , 10.0f);
 
-        if (HitResult.GetActor() && !HitResult.GetActor()->IsA<ALandscapeProxy>())
+        if (HitResult.GetActor() && !HitResult.GetActor()->IsA<ALandscapeProxy>() && !HitResult.GetActor()->IsA<ATreeActor>())
         {
             //UE_LOG(LogTemp, Warning, TEXT("%s  hitname = %s"), *HitResult.BoneName.ToString(), *HitResult.GetActor()->GetName());
             return false;

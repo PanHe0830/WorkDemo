@@ -13,6 +13,7 @@
 
 enum class EAssertType : uint8;
 struct FStreamableManager;
+class AAssertActor;
 
 /**
  * 
@@ -39,4 +40,10 @@ public:
     // 异步加载管理器
     FStreamableManager StreamableManager;
 #endif
+
+    UPROPERTY(VisibleAnywhere, Category = "Generate")
+    TSubclassOf<AAssertActor> AssertActor;
+
+    // 生成资源Actor
+    void ResourceSpawnAssertActor(UWorld* World, FVector Location, FRotator Rotation);
 };

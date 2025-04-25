@@ -22,4 +22,6 @@ protected:
 	
 public:
 	UAssertResourceManager* ResourceManager;
+
+	void BuildSystemSpawnActor(TSubclassOf<AActor> Actor , FVector Location , FRotator Rotator);
 };

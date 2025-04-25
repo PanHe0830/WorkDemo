@@ -97,7 +97,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	UAnimMontage* HitTreeMontage;
 
-
 public:
 	/** 记录当前角色可以拿到那些物品 */
 	void SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, float>& Assert , AActor* actor);	// 设置当前的物品类型和数量

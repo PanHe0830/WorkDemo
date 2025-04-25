@@ -20,3 +20,24 @@ void UBuildSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		ResourceManager = NewObject<UAssertResourceManager>(GetTransientPackage(), BlueprintClass);
 	}
 }
+
+void UBuildSubsystem::BuildSystemSpawnActor(TSubclassOf<AActor> Actor, FVector Location, FRotator Rotator)
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		AActor* actor = World->SpawnActor<AActor>(
+			Actor,
+			Location,
+			Rotator,
+			param
+		);
+		if (!actor)
+		{
+			UE_LOG(LogTemp , Warning , TEXT("spawn failed"));
+		}
+	}
+}

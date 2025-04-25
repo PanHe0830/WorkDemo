@@ -6,6 +6,8 @@
 #include "ActorBase.h"
 #include "TreeActor.generated.h"
 
+class AAssertActor;
+
 /**
  * 
  */
@@ -32,4 +34,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Tree")
 	TArray<UStaticMesh*> StaticMeshs;
+
+	UPROPERTY(EditAnywhere, Category = "Tree")
+	TSubclassOf<AAssertActor> AssertActor;
 };

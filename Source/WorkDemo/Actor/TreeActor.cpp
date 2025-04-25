@@ -3,6 +3,10 @@
 
 #include "TreeActor.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "AssertActor.h"
+#include "WorkDemo/SubSystem/BuildSubsystem.h"
+#include "WorkDemo/ResourceManager/AssertResourceManager.h"
+#include "WorkDemo/Actor/AssertActor.h"
 
 ATreeActor::ATreeActor()
 {
@@ -39,10 +43,16 @@ void ATreeActor::RecvDamage(AActor* DamagedActor, float Damage, const class UDam
 {
     Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 
-    UE_LOG(LogTemp, Warning, TEXT("Tree Actor recv damage"));
-
     if (Health <= 0)
     {
+        FVector Location = GetActorLocation();
+        FRotator Rotator = GetActorRotation();
+        UBuildSubsystem* build = GetWorld()->GetGameInstance()->GetSubsystem<UBuildSubsystem>();
+        if (build)
+        {
+            build->BuildSystemSpawnActor(AssertActor , Location , Rotator);
+        }
+
         Destroy();
     }
 }
@@ -51,7 +61,6 @@ void ATreeActor::SetMeshCollision()
 {
     ActorStaticMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
     ActorStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    //ActorStaticMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
     ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
     ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
     ActorStaticMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);

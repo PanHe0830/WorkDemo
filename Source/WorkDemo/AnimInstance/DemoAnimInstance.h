@@ -13,5 +13,6 @@ UCLASS()
 class WORKDEMO_API UDemoAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+public:
+
 };
