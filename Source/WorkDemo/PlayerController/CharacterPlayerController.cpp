@@ -112,6 +112,8 @@ void ACharacterPlayerController::DamageTree()
                     character,
                     UDamageType::StaticClass()
                 );
+
+                character->PlayHitTreeMontage();
             }
         }
     }

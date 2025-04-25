@@ -16,6 +16,7 @@ struct FInputActionValue;
 class UMyPlayerMovementComponent;
 class UInventoryComponent;
 class UInventoryWidget;
+class UAnimMontage;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -52,7 +53,6 @@ class AWorkDemoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UMyPlayerMovementComponent* MoveComponent;
 
-
 public:
 	AWorkDemoCharacter();
 	
@@ -79,6 +79,8 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	/** GetBagComponent **/
+	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; };
 
 private:
 	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
@@ -87,11 +89,22 @@ private:
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
+	/** 角色背包 */
+	UPROPERTY(EditAnywhere, Category = "Component")
+	UInventoryComponent* InventoryComponent;
+
+	/* Animation */
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UAnimMontage* HitTreeMontage;
+
+
 public:
 	/** 记录当前角色可以拿到那些物品 */
 	void SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, float>& Assert , AActor* actor);	// 设置当前的物品类型和数量
 
 	void ClearCurrentCanPickUpAssertTypeAndNum();// 清空当前的物品类型和数量
+
+	void PickUpCurrentAssertInInventoryComponent();
 
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
 	TMap<EAssertType, float> AssertAndAssertNum;
@@ -99,14 +112,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
 	AActor* AssertActor;
 
-private:
-	/** 角色背包 */
-	UPROPERTY(EditAnywhere, Category = "Component")
-	UInventoryComponent* InventoryComponent;
-
-public:
-	void PickUpCurrentAssertInInventoryComponent();
-
-	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; };
+	/* Play Animation */
+	void PlayHitTreeMontage();
 };
 

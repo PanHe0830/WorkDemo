@@ -13,6 +13,7 @@
 #include "WorkDemo/Component/MyPlayerMovementComponent.h"
 #include "WorkDemo/Component/InventoryComponent.h"
 #include "WorkDemo/HUD/InventoryWidget.h"
+#include "Animation/AnimMontage.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -172,5 +173,15 @@ void AWorkDemoCharacter::PickUpCurrentAssertInInventoryComponent()
 	for (auto& ite : AssertAndAssertNum)
 	{
 		InventoryComponent->AddItem(static_cast<int32>(ite.Key),ite.Value);
+	}
+}
+
+void AWorkDemoCharacter::PlayHitTreeMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance)
+	{
+		float MontageSeconds = AnimInstance->Montage_Play(HitTreeMontage);
+		UE_LOG(LogTemp, Warning, TEXT("play failed %.1f "), MontageSeconds);
 	}
 }
