@@ -10,7 +10,7 @@ UTexture2D* UAssertResourceManager::GetIconByType(EAssertType Type) const
 {
     if (AssertIconMap.Contains(Type))
     {
-        UE_LOG(LogTemp, Warning, TEXT("have picture"));
+        //UE_LOG(LogTemp, Warning, TEXT("have picture"));
         return AssertIconMap[Type].AssertTexture.LoadSynchronous();
     }
     return nullptr;
@@ -20,7 +20,7 @@ UStaticMesh* UAssertResourceManager::GetMeshByType(EAssertType Type) const
 {
     if (AssertIconMap.Contains(Type))
     {
-        UE_LOG(LogTemp, Warning, TEXT("have picture"));
+        //UE_LOG(LogTemp, Warning, TEXT("have picture"));
         return AssertIconMap[Type].AssertMesh.LoadSynchronous();
     }
     return nullptr;

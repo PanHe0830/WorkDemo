@@ -45,15 +45,15 @@ void ATreeActor::RecvDamage(AActor* DamagedActor, float Damage, const class UDam
 
     if (Health <= 0)
     {
+        Destroy();
+
         FVector Location = GetActorLocation();
         FRotator Rotator = GetActorRotation();
         UBuildSubsystem* build = GetWorld()->GetGameInstance()->GetSubsystem<UBuildSubsystem>();
         if (build)
         {
-            build->BuildSystemSpawnActor(AssertActor , Location , Rotator);
+            build->BuildSystemSpawnActor(AssertActor, Location, Rotator);
         }
-
-        Destroy();
     }
 }
 

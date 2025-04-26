@@ -11,6 +11,7 @@
 #include "TreeActor.h"
 #include "WorkDemo/SubSystem/BuildSubsystem.h"
 #include "WorkDemo/ResourceManager/AssertResourceManager.h"
+#include "Kismet/GameplayStatics.h"
 
 AAssertActor::AAssertActor()
 {
@@ -42,6 +43,7 @@ void AAssertActor::BeginPlay()
     }
     else
     {
+        UE_LOG(LogTemp, Warning, TEXT("AssertActor destory"));
         Destroy();
     }
 }
@@ -58,10 +60,12 @@ bool AAssertActor::CheckAssertPosition()
     UWorld* World = GetWorld();
     if (World)
     {
+        AWorkDemoCharacter* Character = Cast<AWorkDemoCharacter>(UGameplayStatics::GetPlayerCharacter(World, 0));
         FHitResult HitResult;
         // 设置碰撞查询参数
         FCollisionQueryParams CollisionParams;
         CollisionParams.AddIgnoredActor(this); // 忽略附加到的Actor
+        CollisionParams.AddIgnoredActor(Character);
         TArray<UActorComponent*> Components;
         GetComponents(Components);
         for (UActorComponent* Component : Components)
@@ -91,6 +95,7 @@ bool AAssertActor::CheckAssertPosition()
         }
         return true;
     }
+    //UE_LOG(LogTemp, Warning, TEXT("world is nullptr"));
     return false;
 }
 
@@ -178,7 +183,7 @@ void AAssertActor::SphereComponentBeginOverlap(UPrimitiveComponent* OverlappedCo
     AWorkDemoCharacter* WrokDemoCharacter = Cast<AWorkDemoCharacter>(OtherActor);
     if (WrokDemoCharacter)
     {
-        UE_LOG(LogTemp , Warning , TEXT("WrokDemoCharacter is exist"));
+        //UE_LOG(LogTemp , Warning , TEXT("WrokDemoCharacter is exist"));
         WrokDemoCharacter->SetCurrentCanPickUpAssertTypeAndNum(AssertAndAssertNum , this);
     }
 }
