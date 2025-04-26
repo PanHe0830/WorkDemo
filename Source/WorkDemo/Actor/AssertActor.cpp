@@ -9,6 +9,7 @@
 #include "WorkDemo/WorkDemoCharacter.h"
 #include "WorkDemo/HUD/PickUpWidget.h"
 #include "TreeActor.h"
+#include "WorkDemo/SubSystem/BuildSubsystem.h"
 
 AAssertActor::AAssertActor()
 {
@@ -99,7 +100,7 @@ void AAssertActor::SetCurrentAssert()
     {
         int RandNum = FMath::RandRange(0, AssertType.Num() - 1);
         EAssertType Type = AssertType[RandNum]; // 获得资源的类型
-        float OneDecimalValue = FMath::RoundToFloat(FMath::FRandRange(0.0f, 10.0f) * 10.0f) / 10.0f; // 获得资源的数量
+        float OneDecimalValue = FMath::RoundToFloat(FMath::FRandRange(1.0f, 5.0f) * 10.0f) / 10.0f; // 获得资源的数量
         if (AssertAndAssertNum.Find(Type))
         {
             AssertAndAssertNum[Type] += OneDecimalValue;
@@ -110,6 +111,10 @@ void AAssertActor::SetCurrentAssert()
         }
     }
 
+    //UWorld* World = GetWorld();
+    //
+    //if (!World) return;
+
     // 展示资源 Mesh
     int VisualIndex = 0;
     for (auto& Elem : AssertAndAssertNum)
@@ -117,6 +122,8 @@ void AAssertActor::SetCurrentAssert()
         EAssertType Type = Elem.Key;
         float Amount = Elem.Value;
 
+        //UBuildSubsystem* Build = World->GetSubsystem<UBuildSubsystem>();
+        //if(Build && Build->ResourceManager)
         if (!ResourceMeshMap.Contains(Type)) continue;
 
         int Count = FMath::CeilToInt(Amount); // 每个资源生成几个 Mesh，1个单位就一个 Mesh

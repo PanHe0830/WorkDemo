@@ -22,3 +22,16 @@ struct FItemData
     
     bool IsValid() const { return ItemID != -1; }
 };
+
+// 这个结构体是关于某个资源的相关资源，例如木头资源的木头的贴图，木头的网格体
+USTRUCT(BlueprintType)
+struct FAssertSet
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSoftObjectPtr<UTexture2D> AssertTexture = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSoftObjectPtr<UStaticMesh> AssertMesh = nullptr;
+};

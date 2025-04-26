@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "WorkDemo/Type/ItemData.h"
 #include "AssertResourceManager.generated.h"
 
 /**
@@ -26,11 +27,16 @@ class WORKDEMO_API UAssertResourceManager : public UObject
 public:
     // 资源映射表
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource")
-    TMap<EAssertType, TSoftObjectPtr<UTexture2D>> AssertIconMap;
+    TMap<EAssertType, FAssertSet> AssertIconMap;
+
+    //TMap<EAssertType, TSoftObjectPtr<UTexture2D>> AssertIconMap;
 
     // 根据枚举获取图片（同步加载）
     UFUNCTION(BlueprintCallable, Category = "Resource")
     UTexture2D* GetIconByType(EAssertType Type) const;
+
+    UFUNCTION(BlueprintCallable, Category = "Resource")
+    UStaticMesh* GetMeshByType(EAssertType Type) const;
 
 #if 0
     // 异步加载版本（可选）
@@ -40,10 +46,4 @@ public:
     // 异步加载管理器
     FStreamableManager StreamableManager;
 #endif
-
-    UPROPERTY(VisibleAnywhere, Category = "Generate")
-    TSubclassOf<AAssertActor> AssertActor;
-
-    // 生成资源Actor
-    void ResourceSpawnAssertActor(UWorld* World, FVector Location, FRotator Rotation);
 };
