@@ -51,8 +51,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Assert")
 	TArray<EAssertType> AssertType;
 
-	UPROPERTY(EditAnywhere, Category = "Assert")
-	TMap<EAssertType, UStaticMesh*> ResourceMeshMap;
+	//UPROPERTY(EditAnywhere, Category = "Assert")
+	//TMap<EAssertType, UStaticMesh*> ResourceMeshMap;
 
 	UPROPERTY(EditAnywhere, Category = "Assert")
 	UWidgetComponent* ShowWidget;

@@ -10,6 +10,7 @@
 #include "WorkDemo/HUD/PickUpWidget.h"
 #include "TreeActor.h"
 #include "WorkDemo/SubSystem/BuildSubsystem.h"
+#include "WorkDemo/ResourceManager/AssertResourceManager.h"
 
 AAssertActor::AAssertActor()
 {
@@ -111,9 +112,9 @@ void AAssertActor::SetCurrentAssert()
         }
     }
 
-    //UWorld* World = GetWorld();
-    //
-    //if (!World) return;
+    UWorld* World = GetWorld();
+    
+    if (!World) return;
 
     // 展示资源 Mesh
     int VisualIndex = 0;
@@ -122,33 +123,31 @@ void AAssertActor::SetCurrentAssert()
         EAssertType Type = Elem.Key;
         float Amount = Elem.Value;
 
-        //UBuildSubsystem* Build = World->GetSubsystem<UBuildSubsystem>();
-        //if(Build && Build->ResourceManager)
-        if (!ResourceMeshMap.Contains(Type)) continue;
-
-        int Count = FMath::CeilToInt(Amount); // 每个资源生成几个 Mesh，1个单位就一个 Mesh
-        for (int i = 0; i < Count; i++)
+        UBuildSubsystem* Build = World->GetGameInstance()->GetSubsystem<UBuildSubsystem>();
+        if (Build && Build->ResourceManager)
         {
-            FString CompName = FString::Printf(TEXT("Mesh_%d_%d"), (int32)Type, i);
-            UStaticMeshComponent* MeshComp = NewObject<UStaticMeshComponent>(this, *CompName);
-            MeshComp->RegisterComponent();
-            MeshComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-            MeshComp->SetStaticMesh(ResourceMeshMap[Type]);
+            if (!Build->ResourceManager->AssertIconMap.Contains(Type)) return;
 
-            // 自然摆放：稍微随机一点
-            FVector RandomOffset(
-                FMath::FRandRange(-50.f, 50.f),
-                FMath::FRandRange(-50.f, 50.f),
-                FMath::FRandRange(0.f, 30.f)
-            );
-            FRotator RandomRotation(0.f, FMath::FRandRange(0.0f, 360.0f), 0.f);
+            int Count = FMath::CeilToInt(Amount); // 每个资源生成几个 Mesh，1个单位就一个 Mesh
+            for (int i = 0; i < Count; i++)
+            {
+                FString CompName = FString::Printf(TEXT("Mesh_%d_%d"), (int32)Type, i);
+                UStaticMeshComponent* MeshComp = NewObject<UStaticMeshComponent>(this, *CompName);
+                MeshComp->RegisterComponent();
+                MeshComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+                MeshComp->SetStaticMesh(Build->ResourceManager->GetMeshByType(Type));
 
-            MeshComp->SetRelativeLocation(RandomOffset);
-            MeshComp->SetRelativeRotation(RandomRotation);
+                // 自然摆放：稍微随机一点
+                FVector RandomOffset(
+                    FMath::FRandRange(-50.f, 50.f),
+                    FMath::FRandRange(-50.f, 50.f),
+                    FMath::FRandRange(0.f, 30.f)
+                );
+                FRotator RandomRotation(0.f, FMath::FRandRange(0.0f, 360.0f), 0.f);
 
-            // 可选缩放
-            //float Scale = FMath::FRandRange(0.8f, 1.2f);
-            //MeshComp->SetRelativeScale3D(FVector(Scale));
+                MeshComp->SetRelativeLocation(RandomOffset);
+                MeshComp->SetRelativeRotation(RandomRotation);
+            }
         }
     }
 }
