@@ -13,26 +13,25 @@ void UInventoryWidget::NativeConstruct()
 {
     Super::NativeConstruct();
 
-    //if (!ItemSlotWidgetClass || !WrapBox) return;
-    //
-    //for (int32 Index = 0; Index < SlotCount; ++Index)
-    //{
-    //    UBagModelWidget* NewSlot = CreateWidget<UBagModelWidget>(this, ItemSlotWidgetClass);
-    //    if (NewSlot)
-    //    {
-    //        UWrapBoxSlot* WrapSlot = WrapBox->AddChildToWrapBox(NewSlot);
-    //    }
-    //}
-
     BagArray.Empty();
 
     if (!ItemSlotWidgetClass || !UniformGridPanel) return;
+
+    //FVector2D Size = GetDesiredSize();
+    //float widget = Size.X;
+    //float high = Size.Y;
+    //int32 highnum = SlotCount / Columns;
+    //
+    //float widghtdis = widget / 6;
+    //float highdis = high / highnum;
+
     
     for (int32 Index = 0; Index < SlotCount; ++Index)
     {
         UBagModelWidget* NewSlot = CreateWidget<UBagModelWidget>(this, ItemSlotWidgetClass);
         if (NewSlot)
         {
+            //NewSlot->SetSize(widghtdis, highdis);
             UUniformGridSlot* GridSlot = UniformGridPanel->AddChildToUniformGrid(NewSlot);
             GridSlot->SetRow(Index / Columns);
             GridSlot->SetColumn(Index % Columns);

@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameMode.h"
-#include "DemoGameMode.generated.h"
+#include "BuildBase.h"
+#include "FarmLandBuild.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WORKDEMO_API ADemoGameMode : public AGameMode
+class WORKDEMO_API AFarmLandBuild : public ABuildBase
 {
 	GENERATED_BODY()
+	
 };

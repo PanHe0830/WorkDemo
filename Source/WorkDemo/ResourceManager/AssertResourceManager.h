@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "WorkDemo/Type/ItemData.h"
+#include "WorkDemo/Type/AssertType.h"
 #include "AssertResourceManager.generated.h"
 
 /**
@@ -12,7 +13,6 @@
 	20250422 -- 资源图片
 */
 
-enum class EAssertType : uint8;
 struct FStreamableManager;
 class AAssertActor;
 
@@ -29,7 +29,8 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource")
     TMap<EAssertType, FAssertSet> AssertIconMap;
 
-    //TMap<EAssertType, TSoftObjectPtr<UTexture2D>> AssertIconMap;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource")
+    TMap<EBuildType, FBuildNeedAssert> BuildTypeAndNeed;
 
     // 根据枚举获取图片（同步加载）
     UFUNCTION(BlueprintCallable, Category = "Resource")

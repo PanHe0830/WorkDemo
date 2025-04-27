@@ -9,6 +9,7 @@
 class UImage;
 class UTextBlock;
 class UButton;
+class USizeBox;
 
 enum class EAssertType : uint8;
 /**
@@ -28,6 +29,8 @@ public:
 
 	void SetAssertType(EAssertType type);
 
+	void SetSize(float Widget , float High);
+
 	UPROPERTY(meta = (BindWidget))
 	UImage* AssertImageWidget;
 
@@ -42,4 +45,11 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
 	EAssertType AssertType;
+
+	UPROPERTY(meta = (BindWidget))
+	USizeBox* SizeBox;
+
+	UPROPERTY(meta = (BindWidget))
+	USizeBox* SizeBoxNum;
+	
 };

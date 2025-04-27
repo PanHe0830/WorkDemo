@@ -58,4 +58,4 @@ void UAssertResourceManager::LoadIconAsync(EAssertType Type, TFunction<void(UTex
     }
 }
 
-#endif
+#endif  

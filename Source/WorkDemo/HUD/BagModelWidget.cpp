@@ -6,12 +6,20 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h" 
 #include "WorkDemo/Type/AssertType.h"
+#include "Components/SizeBox.h"
 
 void UBagModelWidget::NativeConstruct()
 {
 	AssertImageWidget->SetBrushFromTexture(nullptr,true);
 	AssertNum->SetText(FText());
 	AssertType = EAssertType::EAT_MAX;
+
+	SizeBox->SetWidthOverride(100.0f);  // 设置宽度
+	SizeBox->SetHeightOverride(100.0f); // 设置高度
+	
+	SizeBoxNum->SetWidthOverride(30.0f);  // 设置宽度
+	SizeBoxNum->SetHeightOverride(30.0f); // 设置高度
+
 }
 
 void UBagModelWidget::SetImagePicture(UTexture2D* AssertImage)
@@ -27,4 +35,13 @@ void UBagModelWidget::SetAssertNum(FText Num)
 void UBagModelWidget::SetAssertType(EAssertType type)
 {
 	AssertType = type;
+}
+
+void UBagModelWidget::SetSize(float Widget, float High)
+{
+	if (SizeBox)
+	{
+		SizeBox->SetWidthOverride(Widget);  // 设置宽度
+		SizeBox->SetHeightOverride(High); // 设置高度
+	}
 }

@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameMode.h"
-#include "DemoGameMode.generated.h"
+#include "Blueprint/UserWidget.h"
+#include "BuildTimeWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WORKDEMO_API ADemoGameMode : public AGameMode
+class WORKDEMO_API UBuildTimeWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	
 };

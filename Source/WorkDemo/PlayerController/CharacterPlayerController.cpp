@@ -37,14 +37,19 @@ void ACharacterPlayerController::SetBagVisibility()
 {
     if(bFlag)
     {
+        FInputModeGameOnly mode;
+        SetInputMode(mode);
+        SetShowMouseCursor(false);
         MainWidgetInstance->SetBagUiVisibility(ESlateVisibility::Hidden);
-        //UE_LOG(LogTemp, Warning, TEXT("visible"));
     }
     else
     {
         MainWidgetInstance->SetBagUiVisibility(ESlateVisibility::Visible);
         RefreshUi();
-        //UE_LOG(LogTemp, Warning, TEXT("hidder"));
+
+        FInputModeGameAndUI Mode;
+        SetInputMode(Mode);
+        SetShowMouseCursor(true);
     }
     bFlag = !bFlag;
 
@@ -132,7 +137,9 @@ void ACharacterPlayerController::RefreshUi()
     }
 }
 
-void ACharacterPlayerController::CheckDistanceByViewChannel()
+bool ACharacterPlayerController::CheckAssertDown()
 {
 
+
+    return false;
 }

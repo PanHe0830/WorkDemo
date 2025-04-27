@@ -1,5 +1,8 @@
 #pragma once
 
+#include "CoreMinimal.h"
+#include "AssertType.generated.h"
+
 UENUM(BlueprintType)
 enum class EAssertType : uint8
 {
@@ -10,4 +13,23 @@ enum class EAssertType : uint8
 	EAT_Fruit UMETA(DisplayName = "Fruit"), // 水果
 
 	EAT_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
+UENUM(BlueprintType)
+enum class EBuildType : uint8
+{
+	EBT_House UMETA(DisplayName = "House"), // 房子
+	EBT_FarmLand UMETA(DisplayName = "FarmLand"), //农田
+
+	EBT_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
+// 这是建筑需要的资源的结构体，例如房子需要木头
+USTRUCT(BlueprintType)
+struct FBuildNeedAssert
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAssertType, float> BuildNeedTypeAndNum;
 };
