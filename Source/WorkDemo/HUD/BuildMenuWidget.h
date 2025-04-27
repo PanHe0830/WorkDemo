@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "WorkDemo/Type/AssertType.h"
 #include "BuildMenuWidget.generated.h"
 
 class UScrollBox;
@@ -19,6 +20,8 @@ class WORKDEMO_API UBuildMenuWidget : public UUserWidget
 	
 public:
 	virtual void NativeConstruct() override;
+
+	FString GetAssertTypeDisplayName(EAssertType Type);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Build")
 	TSubclassOf<UBuildModeWidget> BuildModeWidget;

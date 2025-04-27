@@ -4,6 +4,20 @@
 #include "BuildModeWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Components/SizeBox.h"
+
+bool UBuildModeWidget::Initialize()
+{
+	if (!Super::Initialize())
+	{
+		return false;
+	}
+
+	SizeBox->SetWidthOverride(300.f);
+	SizeBox->SetHeightOverride(200.f);
+
+	return true;
+}
 
 void UBuildModeWidget::SetImage(UTexture2D* Picture)
 {

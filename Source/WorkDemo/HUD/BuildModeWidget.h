@@ -8,6 +8,7 @@
 
 class UImage;
 class UTextBlock;
+class USizeBox;
 
 /**
  * 
@@ -16,6 +17,8 @@ UCLASS()
 class WORKDEMO_API UBuildModeWidget : public UUserWidget
 {
 	GENERATED_BODY()
+protected:
+	virtual bool Initialize() override;
 public:
 	void SetImage(UTexture2D* Picture);
 
@@ -26,4 +29,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AssertShow;
+
+	UPROPERTY(meta = (BindWidget))
+	USizeBox* SizeBox;
 };

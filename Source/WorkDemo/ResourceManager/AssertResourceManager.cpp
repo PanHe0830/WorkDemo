@@ -26,6 +26,16 @@ UStaticMesh* UAssertResourceManager::GetMeshByType(EAssertType Type) const
     return nullptr;
 }
 
+UTexture2D* UAssertResourceManager::GetBuildByType(EBuildType Type) const
+{
+    if (BuildTypeAndNeed.Contains(Type))
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("have picture"));
+        return BuildTypeAndNeed[Type].BuildTexture.LoadSynchronous();
+    }
+    return nullptr;
+}
+
 
 #if 0
 void UAssertResourceManager::LoadIconAsync(EAssertType Type, TFunction<void(UTexture2D*)> Callback)

@@ -30,6 +30,9 @@ struct FBuildNeedAssert
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	TSoftObjectPtr<UTexture2D> BuildTexture;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EAssertType, float> BuildNeedTypeAndNum;
 };
