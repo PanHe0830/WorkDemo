@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "BuildMenuWidget.generated.h"
 
+class UScrollBox;
+class UBuildModeWidget;
+
 /**
  * 
  */
@@ -14,4 +17,12 @@ class WORKDEMO_API UBuildMenuWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void NativeConstruct() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Build")
+	TSubclassOf<UBuildModeWidget> BuildModeWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	UScrollBox* ScrollBox;
 };

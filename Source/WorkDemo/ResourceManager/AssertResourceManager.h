@@ -39,6 +39,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Resource")
     UStaticMesh* GetMeshByType(EAssertType Type) const;
 
+    FORCEINLINE int32 GetBuildTypeAndNeedNum() { return BuildTypeAndNeed.Num(); };
+
 #if 0
     // 异步加载版本（可选）
     UFUNCTION(BlueprintCallable, Category = "Resource")

@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "BuildModeWidget.generated.h"
 
+class UImage;
+class UTextBlock;
+
 /**
  * 
  */
@@ -13,5 +16,14 @@ UCLASS()
 class WORKDEMO_API UBuildModeWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+	void SetImage(UTexture2D* Picture);
+
+	void SetText(FText Text);
+
+	UPROPERTY(meta = (BindWidget))
+	UImage* ImageShow;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* AssertShow;
 };
