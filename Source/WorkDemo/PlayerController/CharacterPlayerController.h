@@ -18,10 +18,16 @@ class WORKDEMO_API ACharacterPlayerController : public APlayerController
 	GENERATED_BODY()
 
 protected:
+	ACharacterPlayerController();
+
 	virtual void BeginPlay() override;
 
 	virtual void SetupInputComponent() override;
 	
+	void ChangeActorLocation(float XY);
+
+	void MouseLeftClicked();
+
 public:
 	// 点击I键设置背包的显示或隐藏
 	void SetBagVisibility();
@@ -37,6 +43,9 @@ public:
 
 	// 确认消耗资源
 	bool CheckAssertDown();
+
+	// 开始建造流程 ， 参数是建筑类型的int32的值
+	void BeginBuild(int32 TypeId);
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UMainWidget> MainWidget;

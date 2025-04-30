@@ -23,6 +23,8 @@ class WORKDEMO_API UBagModelWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
+	virtual bool Initialize() override;
+
 	void SetImagePicture(UTexture2D* AssertImage);
 
 	void SetAssertNum(FText Num);
@@ -39,9 +41,6 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AssertNum;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* AssertButton;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
 	EAssertType AssertType;

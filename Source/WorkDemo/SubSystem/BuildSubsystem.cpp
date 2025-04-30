@@ -5,6 +5,7 @@
 #include "WorkDemo/ResourceManager/AssertResourceManager.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "LandscapeProxy.h"
 
 void UBuildSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -68,6 +69,16 @@ bool UBuildSubsystem::CheckBuildLocation(const FVector& Location, const FRotator
         FCollisionShape::MakeBox(Extents),
         CollisionParams
     );
+
+    
+    if (HitResult.GetActor())
+    {
+        if (HitResult.GetActor()->IsA<ALandscapeProxy>())
+        {
+            return false;
+        }
+        UE_LOG(LogTemp , Warning , TEXT("%s"), *HitResult.GetActor()->GetName());
+    }
 
     return bHit;
 }

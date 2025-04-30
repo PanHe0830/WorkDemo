@@ -8,6 +8,7 @@
 
 class UStaticMeshComponent;
 class UWidgetComponent;
+class UBoxComponent;
 
 enum class EBuildType : uint8;
 
@@ -28,7 +29,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
+protected:
 	UPROPERTY(EditAnywhere, Category = "Base")
 	UStaticMeshComponent* MeshComponent;
 
@@ -45,6 +46,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Base")
 	EBuildType BuildType;
+
+	UPROPERTY(EditAnywhere, Category = "Base")
+	UBoxComponent* CollisionBox;
 
 public:
 	FORCEINLINE float GetBuildTime() { return BuildTime; };

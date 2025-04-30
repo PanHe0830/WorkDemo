@@ -9,6 +9,7 @@
 class UImage;
 class UTextBlock;
 class USizeBox;
+class UButton;
 
 /**
  * 
@@ -24,6 +25,12 @@ public:
 
 	void SetText(FText Text);
 
+	void SetCurrentBuildTypeId(int32 TypeId);
+
+private:
+	UFUNCTION()
+	void BuildFunction();
+
 	UPROPERTY(meta = (BindWidget))
 	UImage* ImageShow;
 
@@ -32,4 +39,11 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	USizeBox* SizeBox;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* ButtonBuild;
+
+	// BuiltType 是这个界面中建筑物的类型，用int32类型来标记 不用枚举是不想包括头文件，嫌麻烦
+	UPROPERTY(VisibleAnywhere, Category = "BuildMode")
+	int32 BuiltType;
 };

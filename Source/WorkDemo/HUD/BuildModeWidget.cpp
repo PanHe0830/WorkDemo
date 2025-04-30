@@ -5,6 +5,9 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/SizeBox.h"
+#include "Kismet/GameplayStatics.h"
+#include "WorkDemo/PlayerController/CharacterPlayerController.h"
+#include "Components/Button.h"
 
 bool UBuildModeWidget::Initialize()
 {
@@ -15,6 +18,12 @@ bool UBuildModeWidget::Initialize()
 
 	SizeBox->SetWidthOverride(300.f);
 	SizeBox->SetHeightOverride(200.f);
+
+
+	if (ButtonBuild)
+	{
+		ButtonBuild->OnClicked.AddDynamic(this, &UBuildModeWidget::BuildFunction);
+	}
 
 	return true;
 }
@@ -32,5 +41,23 @@ void UBuildModeWidget::SetText(FText Text)
 	if (AssertShow)
 	{
 		AssertShow->SetText(Text);
+	}
+}
+
+void UBuildModeWidget::SetCurrentBuildTypeId(int32 TypeId)
+{
+	BuiltType = TypeId;
+}
+
+void UBuildModeWidget::BuildFunction()
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		ACharacterPlayerController* PlayerController = Cast<ACharacterPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+		if (PlayerController)
+		{
+			PlayerController->BeginBuild(BuiltType);
+		}
 	}
 }

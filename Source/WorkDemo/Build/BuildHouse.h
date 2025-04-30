@@ -13,5 +13,16 @@ UCLASS()
 class WORKDEMO_API ABuildHouse : public ABuildBase
 {
 	GENERATED_BODY()
-	
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void NotifyActorBeginCursorOver() override;
+
+	virtual void NotifyActorEndCursorOver() override;
+
+	virtual void NotifyActorOnClicked(FKey ButtonPressed) override;
+
+	virtual void Destroyed() override;
+
+	bool bflag = false;
 };

@@ -4,6 +4,7 @@
 #include "BuildBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ABuildBase::ABuildBase()
@@ -17,9 +18,17 @@ ABuildBase::ABuildBase()
 	MeshComponent->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 	MeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 	MeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera,ECollisionResponse::ECR_Ignore);
+	//MeshComponent->SetGenerateOverlapEvents(true);  // 启用生成重叠事件
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Widget Component"));
 	WidgetComponent->SetupAttachment(MeshComponent);
+
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
+	CollisionBox->SetupAttachment(MeshComponent);
+
+	CollisionBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	//CollisionBox->SetGenerateOverlapEvents(true);  // 启用生成重叠事件
 
 	//MeshComponent->SetCollisionEnabled(ECollisionEnabled::);
 }

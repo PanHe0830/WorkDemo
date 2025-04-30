@@ -30,9 +30,15 @@ struct FBuildNeedAssert
 {
 	GENERATED_BODY()
 
+	// 建筑的蓝图
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> BuildBluePrint;
+
+	// 建筑的贴图/纹理
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> BuildTexture;
 
+	// 建筑建造时需要的资源
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EAssertType, float> BuildNeedTypeAndNum;
 };

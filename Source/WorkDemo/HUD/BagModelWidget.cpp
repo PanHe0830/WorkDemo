@@ -22,6 +22,16 @@ void UBagModelWidget::NativeConstruct()
 
 }
 
+bool UBagModelWidget::Initialize()
+{
+	if (!Super::Initialize())
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void UBagModelWidget::SetImagePicture(UTexture2D* AssertImage)
 {
 	AssertImageWidget->SetBrushFromTexture(AssertImage, true);

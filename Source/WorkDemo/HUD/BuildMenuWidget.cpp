@@ -22,6 +22,7 @@ void UBuildMenuWidget::NativeConstruct()
 				UBuildModeWidget* ChildBuild = CreateWidget<UBuildModeWidget>(this, BuildModeWidget);
 				if (ChildBuild)
 				{
+					ChildBuild->SetCurrentBuildTypeId((int32)ite.Key);
 					ChildBuild->SetImage(Manager->GetBuildByType(ite.Key));
 					for (auto& itee : ite.Value.BuildNeedTypeAndNum)
 					{
