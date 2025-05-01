@@ -16,16 +16,16 @@ void ADemoGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-    TArray<AActor*> OutActor;
-    UGameplayStatics::GetAllActorsWithTag(GetWorld(),FName("Tag"),);
+    //TArray<AActor*> OutActor;
+    //UGameplayStatics::GetAllActorsWithTag(GetWorld(),FName("Tag"), OutActor);
 
-    if (GetGameInstance())
-    {
-        UTimeSubsystem* TimeSystem = GetGameInstance()->GetSubsystem<UTimeSubsystem>();
-        if (TimeSystem)
-        {
-            //TimeSystem->StartDayNightCycle();
-            UE_LOG(LogTemp, Warning, TEXT("Game Mode Begin Play"));
-        }
-    }
+    //if (GetGameInstance())
+    //{
+    //    UTimeSubsystem* TimeSystem = GetGameInstance()->GetSubsystem<UTimeSubsystem>();
+    //    if (TimeSystem)
+    //    {
+    //        //TimeSystem->StartDayNightCycle();
+    //        UE_LOG(LogTemp, Warning, TEXT("Game Mode Begin Play"));
+    //    }
+    //}
 }
