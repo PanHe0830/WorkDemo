@@ -59,4 +59,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Damage")
 	float CurrentDamage = 50.f;
+
+	bool bBuildFlag = true;
+	//int32 id;
 };

@@ -139,6 +139,75 @@ void UBuildSubsystem::SetCollisionBoxColor()
     }
 }
 
+void UBuildSubsystem::BuildSystemFirstViewCheck(TSubclassOf<AActor> BuildingTemplate, FVector WorldLocation, FVector Direction,TArray<AActor*> IgnoreActors)
+{
+    //FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(ViewportTrace), true);
+    //TraceParams.AddIgnoredActor(this); // 忽略自身
+
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        // 射线参数
+        FVector TraceStart = WorldLocation;
+        FVector TraceEnd = TraceStart + (Direction * 3000.f); // 3米范围
+
+        FHitResult Hit;
+        FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(ViewportTrace), true);
+        TraceParams.AddIgnoredActors(IgnoreActors);
+
+        // 执行射线检测
+        bool bHit = GetWorld()->LineTraceSingleByChannel(
+            Hit, 
+            TraceStart, 
+            TraceEnd, 
+            ECC_Visibility, 
+            TraceParams
+        );
+
+        // 可视化调试射线
+        //DrawDebugLine(GetWorld(), TraceStart, TraceEnd, bHit ? FColor::Green : FColor::Red, false, 1.0f, 0, 1.0f);
+
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+        if (bHit)
+        {
+            // 输出命中对象
+            PreviewBuilding = World->SpawnActor<AActor>(
+                BuildingTemplate,
+                Hit.Location,
+                FRotator(0,0,0),
+                SpawnParams
+            );
+        }
+        else
+        {
+            // 没命中
+            PreviewBuilding = World->SpawnActor<AActor>(
+                BuildingTemplate,
+                TraceEnd,
+                FRotator(0, 0, 0),
+                SpawnParams
+            );
+        }
+        
+        if (PreviewBuilding)
+        {
+            UStaticMeshComponent* tempmesh = PreviewBuilding->FindComponentByClass<UStaticMeshComponent>();
+            if (tempmesh)
+            {
+                tempmesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+                //tempmesh->SetCollisionResponseToChannel();
+            }
+            UBoxComponent* Box = PreviewBuilding->FindComponentByClass<UBoxComponent>();
+            if (Box)
+            {
+                Box->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+            }
+        }
+    }
+}
+
 bool UBuildSubsystem::ShowPreview(TSubclassOf<AActor> BuildingTemplate, const FVector& Location, const FRotator& Rotation)
 {
     if (!BuildingTemplate) return false; //if (PreviewBuilding) PreviewBuilding->Destroy();
@@ -178,7 +247,7 @@ void UBuildSubsystem::ChangePreviewActorPosition(FVector position)
 
     SpawnLocation = position;
 
-    SetCollisionBoxColor();
+    //SetCollisionBoxColor();
 }
 
 void UBuildSubsystem::SetCollisionBoxVisibilityHide()
@@ -215,4 +284,83 @@ bool UBuildSubsystem::GetCurrentIsRight()
     }
 
     return true;
+}
+
+bool UBuildSubsystem::DoBoxCheck()
+{
+    //FVector BoxCenter = PreviewBuilding->GetActorLocation();
+    //FVector BoxHalfExtent = FVector(200.f, 200.f, 200.f); // 你房子的碰撞范围（可改为实际值）
+    //TArray<AActor*> IgnoreActors;
+    //TArray<AActor*> OutActors;
+    //
+    //// 过滤类型：WorldStatic（建筑、地面等）
+    //TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+    ////ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_WorldStatic));
+    ////ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
+    //
+    //bool bBlocked = UKismetSystemLibrary::BoxOverlapActors(
+    //    GetWorld(),
+    //    BoxCenter,
+    //    BoxHalfExtent,
+    //    //ObjectTypes,
+    //    //nullptr,          // 任何Actor类型都检测
+    //    //IgnoreActors,
+    //    //OutActors
+    //);
+
+    FVector Location = PreviewBuilding->GetActorLocation();
+    UBoxComponent* BoxComponent = PreviewBuilding->FindComponentByClass<UBoxComponent>();
+    FVector Extents = BoxComponent->GetScaledBoxExtent();
+    FRotator Rotation(0, 0, 0);
+
+    FCollisionQueryParams CollisionParams;
+    CollisionParams.AddIgnoredActor(PreviewBuilding); // 忽略附加到的Actor
+
+    // 执行盒体追踪检测
+    FHitResult HitResult;
+    bool bHit = GetWorld()->SweepSingleByChannel(
+        HitResult,
+        Location,
+        Location,
+        Rotation.Quaternion(),
+        ECC_Visibility, // 使用适合你项目的碰撞通道
+        FCollisionShape::MakeBox(Extents),
+        CollisionParams
+    );
+
+    DrawDebugBox(GetWorld(), Location, Extents, FColor::Red, false, 1.f, 0, 1.0f);
+
+    if (HitResult.GetActor())
+    {
+        if (HitResult.GetActor()->IsA<ALandscapeProxy>())
+        {
+            return true;
+        }
+        UE_LOG(LogTemp, Warning, TEXT("%s"), *HitResult.GetActor()->GetName());
+    }
+    // true 有碰撞 false，无碰撞
+    return !bHit;
+}
+
+void UBuildSubsystem::SetActorColliksion()
+{
+    if (PreviewBuilding)
+    {
+        UStaticMeshComponent* tempmesh = PreviewBuilding->FindComponentByClass<UStaticMeshComponent>();
+        if (tempmesh)
+        {
+            //tempmesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+            tempmesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic,ECollisionResponse::ECR_Block);
+            tempmesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
+            tempmesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Block);
+            tempmesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Vehicle, ECollisionResponse::ECR_Block);
+            tempmesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+            UE_LOG(LogTemp , Warning , TEXT("==============================="));
+        }
+        UBoxComponent* Box = PreviewBuilding->FindComponentByClass<UBoxComponent>();
+        if (Box)
+        {
+            Box->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+        }
+    }
 }

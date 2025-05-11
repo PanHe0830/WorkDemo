@@ -16,13 +16,9 @@ ACharacterPlayerController::ACharacterPlayerController()
 {
     bEnableClickEvents = true;
     bEnableTouchEvents = true;
-    bShowMouseCursor = true;
+    bShowMouseCursor = false;
     bEnableMouseOverEvents = true;
     bEnableTouchOverEvents = true;
-    EnableInput(this);
-
-    //FInputModeGameAndUI mode;
-    //SetInputMode(mode);
 }
 
 void ACharacterPlayerController::BeginPlay()
@@ -96,7 +92,7 @@ void ACharacterPlayerController::DamageTree()
     FVector EndLocation;
     if (character)
     {
-        USkeletalMeshComponent* Mesh = character->GetMesh();
+        USkeletalMeshComponent* Mesh = character->GetFirstSkeleMesh();
         if (Mesh)
         {
             StartLocation = Mesh->GetSocketLocation("LineTraceStart"); // LineTraceStart 是我在角色网格体上新添加的插槽，用于射线检测
@@ -164,7 +160,28 @@ void ACharacterPlayerController::BeginBuild(int32 TypeId)
     InputComponent->BindAxis("BuildBuild", this, &ACharacterPlayerController::ChangeActorLocation);
     InputComponent->BindAction("BuildMouseClicked", IE_Pressed, this , &ACharacterPlayerController::MouseLeftClicked);
     
+    bBuildFlag = true;
+    int ScreenX;
+    int ScreenY;
+    GetViewportSize(ScreenX, ScreenY);
+    FVector2D ScreenCenter(ScreenX / 2.f, ScreenY / 2.f);
+
+    FVector WorldLocation3D;
+    FVector WorldDirection3D;
+    if (DeprojectScreenPositionToWorld(ScreenX / 2.f, ScreenY / 2.f, WorldLocation3D, WorldDirection3D))
+    {
+        UBuildSubsystem* Build = GetGameInstance()->GetSubsystem<UBuildSubsystem>();
+        if (Build)
+        {
+            TArray<AActor*> IgnoreArry;
+            IgnoreArry.Add(GetCharacter());
+            auto BiuldTmap = Build->ResourceManager->BuildTypeAndNeed;
+            Build->BuildSystemFirstViewCheck(BiuldTmap[static_cast<EBuildType>(TypeId)].BuildBluePrint, WorldLocation3D, WorldDirection3D, IgnoreArry);
+        }
+    }
+
     // TODO 
+#if 0
     FHitResult HitResult;
     GetHitResultUnderCursor(ECC_Visibility, false, HitResult); // ECC_Visibility 表示检测可见物体
     FRotator Ratotor(0, 0, 0);
@@ -183,29 +200,59 @@ void ACharacterPlayerController::BeginBuild(int32 TypeId)
         InputComponent->RemoveActionBinding("BuildMouseClicked", IE_Pressed);
         InputComponent->RemoveAxisBinding("BuildBuild");
     }
+#endif
 }
 
 void ACharacterPlayerController::ChangeActorLocation(float XY)
 {
-    FHitResult HitResult;
-    GetHitResultUnderCursor(ECC_WorldStatic, false, HitResult); // ECC_Visibility 表示检测可见物体
+    if (!bBuildFlag) return;
 
-    UBuildSubsystem* Build = GetGameInstance()->GetSubsystem<UBuildSubsystem>();
-    FRotator Ratotor(0, 0, 0);
-    if (Build)
+    int ScreenX;
+    int ScreenY;
+    GetViewportSize(ScreenX, ScreenY);
+    FVector2D ScreenCenter(ScreenX / 2.f, ScreenY / 2.f);
+    FVector WorldLocation3D;
+    FVector WorldDirection3D;
+    if (DeprojectScreenPositionToWorld(ScreenX / 2.f, ScreenY / 2.f, WorldLocation3D, WorldDirection3D))
     {
-        Build->ChangePreviewActorPosition(HitResult.Location);
+        FVector TraceStart = WorldLocation3D;
+        FVector TraceEnd = TraceStart + (WorldDirection3D * 3000.f); // 3米范围
+
+        FHitResult Hit;
+        FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(ViewportTrace), true);
+        TraceParams.AddIgnoredActor(GetCharacter());
+
+        // 执行射线检测
+        bool bHit = GetWorld()->LineTraceSingleByChannel(
+            Hit,
+            TraceStart,
+            TraceEnd,   
+            ECC_Visibility,
+            TraceParams
+        );
+
+        if (bHit)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("%s"), *Hit.Location.ToString());
+            UBuildSubsystem* Build = GetGameInstance()->GetSubsystem<UBuildSubsystem>();
+            if (Build)
+            {
+                Build->ChangePreviewActorPosition(Hit.Location);
+            }
+        }
     }
 }
 
 void ACharacterPlayerController::MouseLeftClicked()
 {
     UBuildSubsystem* Build = GetGameInstance()->GetSubsystem<UBuildSubsystem>();
-    if (Build->GetCurrentIsRight())
+    if (Build->DoBoxCheck())
     {
-        Build->SetCollisionBoxVisibilityHide();
+        Build->SetActorColliksion();
     
         InputComponent->RemoveActionBinding("BuildMouseClicked", IE_Pressed);
         InputComponent->RemoveAxisBinding("BuildBuild");
+        bBuildFlag = false;
     }
+
 }

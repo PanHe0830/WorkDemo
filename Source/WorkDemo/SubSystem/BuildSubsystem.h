@@ -40,6 +40,9 @@ private:
     void SetCollisionBoxColor();
 
 public:
+    void BuildSystemFirstViewCheck(TSubclassOf<AActor> BuildingTemplate, FVector WorldLocation, FVector Direction, TArray<AActor*> IgnoreActors);
+
+public:
     // 生成Actor
     UFUNCTION(BlueprintCallable, Category = "Build System")
     bool ShowPreview(TSubclassOf<AActor> BuildingTemplate, const FVector& Location, const FRotator& Rotation);
@@ -57,6 +60,12 @@ public:
 
     // 获得当前的位置是否合适
     bool GetCurrentIsRight();
+
+    // 进行盒体检测判断当前位置是否合适
+    bool DoBoxCheck();
+
+    // 设置actor的碰撞
+    void SetActorColliksion();
 
     // 记录Actor的位置
     UPROPERTY(VisibleAnywhere, Category = "Build System")

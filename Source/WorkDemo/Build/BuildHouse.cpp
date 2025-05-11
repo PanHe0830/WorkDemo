@@ -21,13 +21,13 @@ void ABuildHouse::BeginPlay()
 
 void ABuildHouse::NotifyActorBeginCursorOver()
 {
-	UE_LOG(LogTemp, Warning, TEXT("NotifyActorBeginCursorOver"));
+	//UE_LOG(LogTemp, Warning, TEXT("NotifyActorBeginCursorOver"));
 	Super::NotifyActorBeginCursorOver();
 }
 
 void ABuildHouse::NotifyActorEndCursorOver()
 {
-	UE_LOG(LogTemp, Warning, TEXT("NotifyActorEndCursorOver"));
+	//UE_LOG(LogTemp, Warning, TEXT("NotifyActorEndCursorOver"));
 	Super::NotifyActorEndCursorOver();
 }
 
@@ -41,14 +41,14 @@ void ABuildHouse::NotifyActorOnClicked(FKey ButtonPressed)
 		{
 			WidgetComponent->SetVisibility(true);
 
-			UE_LOG(LogTemp, Warning, TEXT("NotifyActorOnClicked"));
+			//UE_LOG(LogTemp, Warning, TEXT("NotifyActorOnClicked"));
 		}
 		else
 		{
 			WidgetComponent->SetVisibility(false);
 
-			UE_LOG(LogTemp, Warning, TEXT("NotifyActorOnClicked"));
-		}
+			//UE_LOG(LogTemp, Warning, TEXT("NotifyActorOnClicked"));
+		} 
 	}
 
 	bflag = !bflag;
@@ -58,5 +58,5 @@ void ABuildHouse::Destroyed()
 {
 	Super::Destroyed();
 
-	UE_LOG(LogTemp, Warning, TEXT("ABuildHouse is destroyed"));
+	//UE_LOG(LogTemp, Warning, TEXT("ABuildHouse is destroyed"));
 }

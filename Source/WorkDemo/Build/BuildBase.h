@@ -54,4 +54,6 @@ public:
 	FORCEINLINE float GetBuildTime() { return BuildTime; };
 
 	FORCEINLINE EBuildType GetBuildType() { return BuildType; };
+
+	FORCEINLINE UStaticMeshComponent* GetStaticMesh() { return MeshComponent; };
 };

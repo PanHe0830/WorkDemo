@@ -32,6 +32,14 @@ class AWorkDemoCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+
+	/** First camera add by ph */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FirstCamera;
+
+	/** First Skeletal add by ph */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Mesh1P;
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -76,11 +84,13 @@ protected:
 
 public:
 	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	//FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	/** GetBagComponent **/
 	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; };
+	/** add by ph */
+	FORCEINLINE USkeletalMeshComponent* GetFirstSkeleMesh() { return Mesh1P; };
 
 private:
 	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
