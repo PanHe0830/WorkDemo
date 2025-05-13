@@ -92,7 +92,7 @@ void ACharacterPlayerController::DamageTree()
     FVector EndLocation;
     if (character)
     {
-        USkeletalMeshComponent* Mesh = character->GetFirstSkeleMesh();
+        USkeletalMeshComponent* Mesh = character->GetMesh();
         if (Mesh)
         {
             StartLocation = Mesh->GetSocketLocation("LineTraceStart"); // LineTraceStart 是我在角色网格体上新添加的插槽，用于射线检测

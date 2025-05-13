@@ -17,6 +17,7 @@ class UMyPlayerMovementComponent;
 class UInventoryComponent;
 class UInventoryWidget;
 class UAnimMontage;
+class UCombatComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -34,12 +35,12 @@ class AWorkDemoCharacter : public ACharacter
 	UCameraComponent* FollowCamera;
 
 	/** First camera add by ph */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FirstCamera;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	//UCameraComponent* FirstCamera;
 
 	/** First Skeletal add by ph */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* Mesh1P;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	//USkeletalMeshComponent* Mesh1P;
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -84,13 +85,13 @@ protected:
 
 public:
 	/** Returns CameraBoom subobject **/
-	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
-	//FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	/** GetBagComponent **/
 	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; };
 	/** add by ph */
-	FORCEINLINE USkeletalMeshComponent* GetFirstSkeleMesh() { return Mesh1P; };
+	//FORCEINLINE USkeletalMeshComponent* GetFirstSkeleMesh() { return Mesh1P; };
 
 private:
 	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
@@ -99,9 +100,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
-	/** 角色背包 */
+	/** 角色背包组件 */
 	UPROPERTY(EditAnywhere, Category = "Component")
 	UInventoryComponent* InventoryComponent;
+
+	/** 角色战斗组件 */
+	UCombatComponent* CombatComponent;
 
 	/* Animation */
 	UPROPERTY(EditAnywhere, Category = "Animation")
