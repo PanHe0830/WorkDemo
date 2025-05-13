@@ -87,7 +87,7 @@ void AWorkDemoCharacter::Tick(float DetalTimes)
 {
 	Super::Tick(DetalTimes);
 
-	//HideCharacterIfCameraClose(); // 将第三人称改为第一人称先注释掉判断摄像头和角色网格体之间距离的函数
+	HideCharacterIfCameraClose(); // 将第三人称改为第一人称先注释掉判断摄像头和角色网格体之间距离的函数
 }
 
 //////////////////////////////////////////////////////////////////////////
