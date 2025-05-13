@@ -2,6 +2,9 @@
 
 
 #include "CombatComponent.h"
+#include "WorkDemo/Weapon/WeaponBase.h"
+#include "WorkDemo/WorkDemoCharacter.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
@@ -30,5 +33,24 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UCombatComponent::EquipWeapon(AWeaponBase* Weapon)
+{
+	if (DemoCharacter == nullptr || Weapon == nullptr) return;
+
+	FirstWeapon = Weapon;
+	AttachWeaponToLeftHand(Weapon);
+	Weapon->SetOwner(DemoCharacter);
+}
+
+void UCombatComponent::AttachWeaponToLeftHand(AWeaponBase* Weapon)
+{
+	if (DemoCharacter == nullptr || DemoCharacter->GetMesh() == nullptr || Weapon == nullptr) return;
+	const USkeletalMeshSocket* HandSocket = DemoCharacter->GetMesh()->GetSocketByName(FName("WeaponSocket"));
+	if (HandSocket)
+	{
+		HandSocket->AttachActor(Weapon, DemoCharacter->GetMesh());
+	}
 }
 

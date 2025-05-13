@@ -11,6 +11,7 @@
 **/
 
 class USphereComponent;
+class UWidgetComponent;
 
 UCLASS()
 class WORKDEMO_API AWeaponBase : public AActor
@@ -30,9 +31,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	UFUNCTION()
+	void BeginOverLap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void EndOverLap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	UStaticMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	USphereComponent* ShpereComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UWidgetComponent* PickUpWidget;
 };

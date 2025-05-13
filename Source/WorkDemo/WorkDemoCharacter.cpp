@@ -90,6 +90,15 @@ void AWorkDemoCharacter::Tick(float DetalTimes)
 	HideCharacterIfCameraClose(); // 将第三人称改为第一人称先注释掉判断摄像头和角色网格体之间距离的函数
 }
 
+void AWorkDemoCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if (CombatComponent)
+	{
+		CombatComponent->DemoCharacter = this;
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -202,4 +211,14 @@ void AWorkDemoCharacter::PlayHitTreeMontage()
 			UE_LOG(LogTemp, Warning, TEXT("play failed %.1f "), MontageSeconds);
 		}
 	}
+}
+
+void AWorkDemoCharacter::SetCurrentWeapon(AWeaponBase* Weapon)
+{
+	FirstWeapon = Weapon;
+}
+
+bool AWorkDemoCharacter::GetIsEquipWeapon()
+{
+	return CombatComponent->GetIsEquipWeapon();
 }

@@ -14,5 +14,12 @@ class WORKDEMO_API UDemoAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 public:
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
+	UPROPERTY(BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
+	class AWorkDemoCharacter* DemoCharacter;
+public:
+	UPROPERTY(BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
+	bool IsEquip;
 };

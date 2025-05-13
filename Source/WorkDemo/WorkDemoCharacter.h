@@ -18,6 +18,7 @@ class UInventoryComponent;
 class UInventoryWidget;
 class UAnimMontage;
 class UCombatComponent;
+class AWeaponBase;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -83,6 +84,9 @@ protected:
 
 	virtual void Tick(float DetalTimes) override;
 
+	/** add by ph */
+	virtual void PostInitializeComponents() override;
+	
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -92,6 +96,8 @@ public:
 	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; };
 	/** add by ph */
 	//FORCEINLINE USkeletalMeshComponent* GetFirstSkeleMesh() { return Mesh1P; };
+
+	FORCEINLINE UCombatComponent* GetCombatComponent() { return CombatComponent; };
 
 private:
 	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
@@ -123,9 +129,17 @@ public:
 	TMap<EAssertType, float> AssertAndAssertNum;
 
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
-	AActor* AssertActor;
+	AActor* AssertActor; // 资源Actor
 
 	/* Play Animation */
 	void PlayHitTreeMontage();
+
+	/** 角色当前持有的武器 */
+	void SetCurrentWeapon(AWeaponBase* Weapon);
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	AWeaponBase* FirstWeapon;
+
+	bool GetIsEquipWeapon();
 };
 

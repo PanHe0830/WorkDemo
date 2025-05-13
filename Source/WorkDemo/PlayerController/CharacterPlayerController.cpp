@@ -11,6 +11,7 @@
 #include "WorkDemo/Actor/TreeActor.h"
 #include "WorkDemo/SubSystem/BuildSubsystem.h"
 #include "WorkDemo/ResourceManager/AssertResourceManager.h"
+#include "WorkDemo/Component/CombatComponent.h"
 
 ACharacterPlayerController::ACharacterPlayerController()
 {
@@ -76,13 +77,22 @@ void ACharacterPlayerController::PickUpAssert()
         {
             character->PickUpCurrentAssertInInventoryComponent();
             actor->Destroy();
+            RefreshUi();
+            return;
+        }
+
+        UCombatComponent* Combat = character->GetCombatComponent();
+        if (Combat)
+        {
+            Combat->EquipWeapon(character->FirstWeapon);
+            return;
         }
     }
 
-    if (bFlag)
-    {
-        RefreshUi();
-    }
+    //if (bFlag)
+    //{
+    //    RefreshUi();
+    //}
 }
 
 void ACharacterPlayerController::DamageTree()
@@ -179,28 +189,6 @@ void ACharacterPlayerController::BeginBuild(int32 TypeId)
             Build->BuildSystemFirstViewCheck(BiuldTmap[static_cast<EBuildType>(TypeId)].BuildBluePrint, WorldLocation3D, WorldDirection3D, IgnoreArry);
         }
     }
-
-    // TODO 
-#if 0
-    FHitResult HitResult;
-    GetHitResultUnderCursor(ECC_Visibility, false, HitResult); // ECC_Visibility 表示检测可见物体
-    FRotator Ratotor(0, 0, 0);
-    UBuildSubsystem* Build = GetGameInstance()->GetSubsystem<UBuildSubsystem>();
-    if (Build)
-    {
-        //UE_LOG(LogTemp, Warning, TEXT("Build is success"));
-        auto BiuldTmap = Build->ResourceManager->BuildTypeAndNeed;
-        if (Build->ShowPreview(BiuldTmap[static_cast<EBuildType>(TypeId)].BuildBluePrint, HitResult.Location, Ratotor))
-        {
-            SpawnLocation = HitResult.Location;
-        }
-    }
-    else
-    {
-        InputComponent->RemoveActionBinding("BuildMouseClicked", IE_Pressed);
-        InputComponent->RemoveAxisBinding("BuildBuild");
-    }
-#endif
 }
 
 void ACharacterPlayerController::ChangeActorLocation(float XY)
