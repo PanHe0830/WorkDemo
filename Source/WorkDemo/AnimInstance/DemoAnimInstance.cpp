@@ -3,6 +3,7 @@
 
 #include "DemoAnimInstance.h"
 #include "WorkDemo/WorkDemoCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void UDemoAnimInstance::NativeInitializeAnimation()
 {
@@ -20,5 +21,13 @@ void UDemoAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	}
 	if (!DemoCharacter) return;
 
+	FVector Velocity = DemoCharacter->GetVelocity();
+	Velocity.Z = 0.f;
+	Speed = Velocity.Size();
+
 	IsEquip = DemoCharacter->GetIsEquipWeapon();
+	Falling = DemoCharacter->GetCharacterMovement()->IsFalling();
+
+	//AO_Yaw = DemoCharacter->GetAO_Yaw();
+	//AO_Pitch = DemoCharacter->GetAO_Pitch();
 }
