@@ -15,6 +15,8 @@
 #include "WorkDemo/HUD/InventoryWidget.h"
 #include "Animation/AnimMontage.h"
 #include "WorkDemo/Component/CombatComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -88,6 +90,18 @@ void AWorkDemoCharacter::Tick(float DetalTimes)
 	Super::Tick(DetalTimes);
 
 	HideCharacterIfCameraClose(); // 将第三人称改为第一人称先注释掉判断摄像头和角色网格体之间距离的函数
+	AimOffset(DetalTimes);
+
+	//const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("WeaponSocket"));
+	//if (HandSocket)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("USkeletalMeshSocket"));
+	//	// 获取世界空间下的 Socket 位置
+	//	FVector WorldLocation = HandSocket->GetSocketTransform(GetMesh()).GetLocation();
+	//
+	//	// 绘制调试球
+	//	DrawDebugSphere(GetWorld(), WorldLocation, 10.f, 12, FColor::Red, false, 5.f);
+	//}
 }
 
 void AWorkDemoCharacter::PostInitializeComponents()
@@ -96,6 +110,44 @@ void AWorkDemoCharacter::PostInitializeComponents()
 	if (CombatComponent)
 	{
 		CombatComponent->DemoCharacter = this;
+	}
+}
+
+void AWorkDemoCharacter::AimOffset(float DetalTimes)
+{
+	// 角色没有装备武器直接返回
+	if (CombatComponent == nullptr || CombatComponent->FirstWeapon == nullptr) return;
+
+	// 获得角色的速度
+	FVector Velocity = GetVelocity();
+	Velocity.Z = 0.f;
+	float Speed = Velocity.Size();
+
+	// 获得角色是否在空中
+	bool bIsInAir = GetCharacterMovement()->IsFalling();
+
+	if (Speed == 0.f && !bIsInAir) // 角色没有运动并且角色在地面上
+	{
+		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
+		AO_Yaw = DeltaAimRotation.Yaw;
+		bUseControllerRotationYaw = false;
+	}
+
+	if (Speed > 0.f || bIsInAir) // 角色正在运动或在空中
+	{
+		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		AO_Yaw = 0.f;
+		bUseControllerRotationYaw = true;
+	}
+
+	AO_Pitch = GetBaseAimRotation().Pitch;
+	if (AO_Pitch > 90.f)
+	{
+		// map pitch from [270, 360) to [-90, 0)
+		FVector2D InRange(270.f, 360.f);
+		FVector2D OutRange(-90.f, 0.f);
+		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
 	}
 }
 
@@ -221,4 +273,9 @@ void AWorkDemoCharacter::SetCurrentWeapon(AWeaponBase* Weapon)
 bool AWorkDemoCharacter::GetIsEquipWeapon()
 {
 	return CombatComponent->GetIsEquipWeapon();
+}
+
+void AWorkDemoCharacter::SetStartingAimRotation()
+{
+	StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 }

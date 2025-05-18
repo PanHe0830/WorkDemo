@@ -37,6 +37,8 @@ public:
 	UFUNCTION()
 	void EndOverLap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	void SetHideWidgetComponent();
+
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	UStaticMeshComponent* WeaponMesh;
 

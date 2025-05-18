@@ -42,15 +42,28 @@ void UCombatComponent::EquipWeapon(AWeaponBase* Weapon)
 	FirstWeapon = Weapon;
 	AttachWeaponToLeftHand(Weapon);
 	Weapon->SetOwner(DemoCharacter);
+	Weapon->SetHideWidgetComponent();
 }
 
 void UCombatComponent::AttachWeaponToLeftHand(AWeaponBase* Weapon)
 {
 	if (DemoCharacter == nullptr || DemoCharacter->GetMesh() == nullptr || Weapon == nullptr) return;
+	//const USkeletalMeshSocket* HandSocket = DemoCharacter->GetMesh()->GetSocketByName(FName("WeaponSocket"));
+	//if (HandSocket)
+	//{
+	//	HandSocket->AttachActor(Weapon, DemoCharacter->GetMesh());
+	//}
+
 	const USkeletalMeshSocket* HandSocket = DemoCharacter->GetMesh()->GetSocketByName(FName("WeaponSocket"));
-	if (HandSocket)
+	if (HandSocket && Weapon)
 	{
-		HandSocket->AttachActor(Weapon, DemoCharacter->GetMesh());
+		FTransform SocketTransform = HandSocket->GetSocketTransform(DemoCharacter->GetMesh());
+
+		// 先将武器移动到 Socket 位置（可选）
+		Weapon->SetActorTransform(SocketTransform);
+
+		// 附加武器到 Mesh 的 Socket 上，使用 SnapToTarget 保证跟随旋转
+		Weapon->AttachToComponent(DemoCharacter->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("WeaponSocket"));
 	}
 }
 

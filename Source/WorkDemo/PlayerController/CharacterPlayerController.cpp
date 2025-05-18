@@ -85,6 +85,7 @@ void ACharacterPlayerController::PickUpAssert()
         if (Combat)
         {
             Combat->EquipWeapon(character->FirstWeapon);
+            character->SetStartingAimRotation();
             return;
         }
     }

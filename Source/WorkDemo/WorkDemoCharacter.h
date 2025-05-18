@@ -86,6 +86,9 @@ protected:
 
 	/** add by ph */
 	virtual void PostInitializeComponents() override;
+
+	// 计算角色偏移用于装备武器动画
+	void AimOffset(float DetalTimes);
 	
 public:
 	/** Returns CameraBoom subobject **/
@@ -98,6 +101,9 @@ public:
 	//FORCEINLINE USkeletalMeshComponent* GetFirstSkeleMesh() { return Mesh1P; };
 
 	FORCEINLINE UCombatComponent* GetCombatComponent() { return CombatComponent; };
+
+	FORCEINLINE float GetAO_Yaw() { return AO_Yaw; };
+	FORCEINLINE float GetAO_Pitch() { return AO_Pitch; };
 
 private:
 	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
@@ -116,6 +122,11 @@ private:
 	/* Animation */
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	UAnimMontage* HitTreeMontage;
+
+	float AO_Yaw;
+	float AO_Pitch;
+	FRotator StartingAimRotation;
+
 
 public:
 	/** 记录当前角色可以拿到那些物品 */
@@ -141,5 +152,7 @@ public:
 	AWeaponBase* FirstWeapon;
 
 	bool GetIsEquipWeapon();
+
+	void SetStartingAimRotation();
 };
 

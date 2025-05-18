@@ -74,3 +74,11 @@ void AWeaponBase::EndOverLap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	}
 }
 
+void AWeaponBase::SetHideWidgetComponent()
+{
+	if(PickUpWidget)
+	{
+		PickUpWidget->SetVisibility(false);
+	}
+}
+

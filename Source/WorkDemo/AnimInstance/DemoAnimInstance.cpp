@@ -28,6 +28,6 @@ void UDemoAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	IsEquip = DemoCharacter->GetIsEquipWeapon();
 	Falling = DemoCharacter->GetCharacterMovement()->IsFalling();
 
-	//AO_Yaw = DemoCharacter->GetAO_Yaw();
-	//AO_Pitch = DemoCharacter->GetAO_Pitch();
+	AO_Yaw = DemoCharacter->GetAO_Yaw();
+	AO_Pitch = DemoCharacter->GetAO_Pitch();
 }
