@@ -89,6 +89,13 @@ protected:
 
 	// 计算角色偏移用于装备武器动画
 	void AimOffset(float DetalTimes);
+
+	void TurnInPlace(float DeltaTime);
+
+	ETurningInPlace TurningInPlace;
+
+	UFUNCTION()
+	void RecvDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	
 public:
 	/** Returns CameraBoom subobject **/
@@ -104,6 +111,11 @@ public:
 
 	FORCEINLINE float GetAO_Yaw() { return AO_Yaw; };
 	FORCEINLINE float GetAO_Pitch() { return AO_Pitch; };
+
+public:
+	/* Play Animation */
+	void PlayFireMontage(); // 播放开火动画
+	void PlayHitTreeMontage(); // 播放砍树动画
 
 private:
 	/** 当角色靠近障碍物时摄像机在角色非常近的地方时将角色设置为不可见 */
@@ -124,11 +136,23 @@ private:
 	UAnimMontage* HitTreeMontage;
 
 	float AO_Yaw;
+	float InterpAO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
 
+	UPROPERTY(EditAnywhere, Category = "Fire")
+	UAnimMontage* FireMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Character")
+	float Health = 100.f;
 
 public:
+	// 武器开火
+	void FireButtonPress();
+
+	// 停止开火
+	void FireButtonRelease();
+
 	/** 记录当前角色可以拿到那些物品 */
 	void SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, float>& Assert , AActor* actor);	// 设置当前的物品类型和数量
 
@@ -142,17 +166,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Assert")
 	AActor* AssertActor; // 资源Actor
 
-	/* Play Animation */
-	void PlayHitTreeMontage();
-
 	/** 角色当前持有的武器 */
 	void SetCurrentWeapon(AWeaponBase* Weapon);
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AWeaponBase* FirstWeapon;
 
-	bool GetIsEquipWeapon();
+	bool GetIsEquipWeapon(); // 是否装备武器
 
-	void SetStartingAimRotation();
+	void SetStartingAimRotation(); // 设置刚开始角色拾取武器后，角色控制器的Yaw
 };
 

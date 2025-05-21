@@ -98,6 +98,7 @@ void ACharacterPlayerController::PickUpAssert()
 
 void ACharacterPlayerController::DamageTree()
 {
+    //UE_LOG(LogTemp, Warning, TEXT("DamageTree"));
     AWorkDemoCharacter* character = Cast<AWorkDemoCharacter>(GetCharacter());
     FVector StartLocation;
     FVector EndLocation;
@@ -141,6 +142,8 @@ void ACharacterPlayerController::DamageTree()
                 );
             }
         }
+
+        character->FireButtonPress();
     }
 }
 

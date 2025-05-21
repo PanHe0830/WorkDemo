@@ -41,4 +41,14 @@ struct FBuildNeedAssert
 	// 建筑建造时需要的资源
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EAssertType, float> BuildNeedTypeAndNum;
+}; 
+
+UENUM(BlueprintType)
+enum class ETurningInPlace : uint8
+{
+	ETIP_Left UMETA(DisplayName = "Turning Left"),
+	ETIP_Right UMETA(DisplayName = "Turning Right"),
+	ETIP_NotTurning UMETA(DisplayName = "Not Turning"),
+
+	ETIP_MAX UMETA(DisplayName = "DefaultMAX")
 };

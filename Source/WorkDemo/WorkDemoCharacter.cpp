@@ -17,6 +17,8 @@
 #include "WorkDemo/Component/CombatComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Animation/AnimMontage.h"
+#include "WorkDemo.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -57,6 +59,13 @@ AWorkDemoCharacter::AWorkDemoCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block); 
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetNotifyRigidBodyCollision(true); // 启用 Hit 通知事件（非常关键）
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
@@ -83,6 +92,8 @@ void AWorkDemoCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	OnTakeAnyDamage.AddDynamic(this, &AWorkDemoCharacter::RecvDamage);
 }
 
 void AWorkDemoCharacter::Tick(float DetalTimes)
@@ -132,6 +143,8 @@ void AWorkDemoCharacter::AimOffset(float DetalTimes)
 		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
 		AO_Yaw = DeltaAimRotation.Yaw;
 		bUseControllerRotationYaw = false;
+
+		//TurnInPlace(DetalTimes);
 	}
 
 	if (Speed > 0.f || bIsInAir) // 角色正在运动或在空中
@@ -149,6 +162,39 @@ void AWorkDemoCharacter::AimOffset(float DetalTimes)
 		FVector2D OutRange(-90.f, 0.f);
 		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
 	}
+}
+
+void AWorkDemoCharacter::TurnInPlace(float DeltaTime)
+{
+	if (AO_Yaw > 90.f)
+	{
+		TurningInPlace = ETurningInPlace::ETIP_Right;
+	}
+	else if (AO_Yaw < -90.f)
+	{
+		TurningInPlace = ETurningInPlace::ETIP_Left;
+	}
+	if (TurningInPlace != ETurningInPlace::ETIP_NotTurning)
+	{
+		InterpAO_Yaw = FMath::FInterpTo(InterpAO_Yaw, 0.f, DeltaTime, 4.f);
+		AO_Yaw = InterpAO_Yaw;
+		if (FMath::Abs(AO_Yaw) < 15.f)
+		{
+			TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+			StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		}
+	}
+}
+
+void AWorkDemoCharacter::RecvDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	Health -= Damage;
+	if (Health <= 0)
+	{
+		// TODO -- 播放死亡动画
+		Destroy();
+	}
+	UE_LOG(LogTemp, Warning, TEXT("RecvDamage"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -182,6 +228,9 @@ void AWorkDemoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+
+	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AWorkDemoCharacter::FireButtonPress);
+	//PlayerInputComponent->BindAction("NoFire", IE_Released, this, &AWorkDemoCharacter::FireButtonRelease);
 }
 
 void AWorkDemoCharacter::Move(const FInputActionValue& Value)
@@ -232,6 +281,20 @@ void AWorkDemoCharacter::HideCharacterIfCameraClose()
 	}
 }
 
+void AWorkDemoCharacter::FireButtonPress()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("FireButtonPress"));
+	if (!CombatComponent || CombatComponent->FirstWeapon == nullptr) return;
+	CombatComponent->FireButtonPress(true);
+}
+
+void AWorkDemoCharacter::FireButtonRelease()
+{
+	if (!CombatComponent || CombatComponent->FirstWeapon == nullptr) return;
+
+	CombatComponent->FireButtonPress(false);
+}
+
 void AWorkDemoCharacter::SetCurrentCanPickUpAssertTypeAndNum(TMap<EAssertType, float>& Assert , AActor* actor)
 {
 	AssertActor = actor;
@@ -278,4 +341,13 @@ bool AWorkDemoCharacter::GetIsEquipWeapon()
 void AWorkDemoCharacter::SetStartingAimRotation()
 {
 	StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+}
+
+void AWorkDemoCharacter::PlayFireMontage()
+{
+	UAnimInstance* Montage = GetMesh()->GetAnimInstance();
+	if (FireMontage && Montage)
+	{
+		Montage->Montage_Play(FireMontage);
+	}
 }

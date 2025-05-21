@@ -5,6 +5,7 @@
 #include "WorkDemo/Weapon/WeaponBase.h"
 #include "WorkDemo/WorkDemoCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
@@ -33,6 +34,15 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+
+	if (DemoCharacter)
+	{
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
+		HitTarget = HitResult.ImpactPoint;
+
+		//DrawDebugSphere(GetWorld(), HitResult.Location, 30.f, 12, FColor::Red, true, 5.f);
+	}
 }
 
 void UCombatComponent::EquipWeapon(AWeaponBase* Weapon)
@@ -43,6 +53,18 @@ void UCombatComponent::EquipWeapon(AWeaponBase* Weapon)
 	AttachWeaponToLeftHand(Weapon);
 	Weapon->SetOwner(DemoCharacter);
 	Weapon->SetHideWidgetComponent();
+}
+
+void UCombatComponent::FireButtonPress(bool bPressed)
+{
+	bFlag = bPressed;
+	if (DemoCharacter && bFlag)
+	{
+		DemoCharacter->PlayFireMontage();
+		FirstWeapon->Fire(HitTarget);
+
+		DrawDebugSphere(GetWorld(), HitTarget, 30.f, 12, FColor::Black, true, 5.f);
+	}
 }
 
 void UCombatComponent::AttachWeaponToLeftHand(AWeaponBase* Weapon)
@@ -67,3 +89,49 @@ void UCombatComponent::AttachWeaponToLeftHand(AWeaponBase* Weapon)
 	}
 }
 
+void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
+{
+	FVector2D ViewportSize;
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(ViewportSize);
+	}
+
+	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
+	FVector CrosshairWorldPosition;
+	FVector CrosshairWorldDirection;
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+		UGameplayStatics::GetPlayerController(this, 0),
+		CrosshairLocation,
+		CrosshairWorldPosition,
+		CrosshairWorldDirection
+	);
+
+	if (bScreenToWorld)
+	{
+		FVector Start = CrosshairWorldPosition;
+
+		if (DemoCharacter)
+		{
+			float DistanceToCharacter = (DemoCharacter->GetActorLocation() - Start).Size();
+			Start += CrosshairWorldDirection * (DistanceToCharacter + 100.f);
+		}
+
+		FVector End = Start + CrosshairWorldDirection * 8000;
+
+		GetWorld()->LineTraceSingleByChannel(
+			TraceHitResult,
+			Start,
+			End,
+			ECollisionChannel::ECC_Visibility
+		);
+		//if (TraceHitResult.GetActor() && TraceHitResult.GetActor()->Implements<UInteractWithCrosshairsInterface>())
+		//{
+		//	HUDPackage.CrosshairsColor = FLinearColor::Red;
+		//}
+		//else
+		//{
+		//	HUDPackage.CrosshairsColor = FLinearColor::White;
+		//}
+	}
+}

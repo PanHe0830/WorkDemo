@@ -29,14 +29,25 @@ public:
 public:
 	void EquipWeapon(AWeaponBase* Weapon);
 
+	// ÎäÆ÷Éä»÷
+	void FireButtonPress(bool bPressed);
+
 private:
 	void AttachWeaponToLeftHand(AWeaponBase* Weapon);
+
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	UPROPERTY()
 	class AWorkDemoCharacter* DemoCharacter;
 
 	UPROPERTY()
 	AWeaponBase* FirstWeapon;
+
+	// ÎäÆ÷ÊÇ·ñ¿ª»ð
+	bool bFlag = false;
+
+	UPROPERTY()
+	FVector HitTarget;
 
 public:
 	FORCEINLINE bool GetIsEquipWeapon() { return FirstWeapon == nullptr; };

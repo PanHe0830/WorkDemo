@@ -7,7 +7,7 @@
 #include "WeaponBase.generated.h"
 
 /** 
-	20250513 -- 测试，将这个类当成某个武器
+	武器类
 **/
 
 class USphereComponent;
@@ -30,21 +30,35 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-public:
+	virtual void Fire(FVector HitTarget);
+
+private:
 	UFUNCTION()
 	void BeginOverLap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	UFUNCTION()
 	void EndOverLap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	void SetHideWidgetComponent();
+	//UStaticMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
-	UStaticMeshComponent* WeaponMesh;
+	USkeletalMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	USphereComponent* ShpereComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	UWidgetComponent* PickUpWidget;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UAnimationAsset* WeaponFireAnimation; // 武器开火动画
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<class ACasingBase> CasingClass; // 弹壳
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<class AProjectileBase> ProjectileClass; // 子弹
+
+public:
+	void SetHideWidgetComponent();
 };
